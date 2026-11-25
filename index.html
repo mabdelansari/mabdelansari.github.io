@@ -477,22 +477,31 @@ dl div:not(.lg) dd{margin-top:4px;text-wrap:balance;font-size:clamp(20px,min(1.7
 .sys{position:relative;width:var(--hw);aspect-ratio:1;display:grid;place-items:center;touch-action:none;cursor:grab;-webkit-tap-highlight-color:transparent;user-select:none}
 .sys.dragging{cursor:grabbing}
 .orbit{position:absolute;inset:0;border-radius:50%;border:1.5px solid color-mix(in srgb,var(--accent) 38%,transparent)}
-/* el centro es un átomo: un núcleo que late y desprende energía, tres órbitas de electrones y ondas que se expanden */
-.atom{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
-.atom .shell{fill:none;stroke:color-mix(in srgb,var(--accent) 55%,transparent);stroke-width:1.1}
-.atom .e{fill:var(--accent);stroke:light-dark(#fff,#0C0E14);stroke-width:1.4;filter:drop-shadow(0 0 4px var(--accent))}
-.atom .wave{stroke:none}
-.orb{position:relative;isolation:isolate;width:48%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;text-align:center;color:#fff;
+/* estela: un arco que se ilumina hasta la cabeza del haz */
+.orbit::before{content:"";position:absolute;inset:-1.5px;border-radius:50%;pointer-events:none;
+  background:conic-gradient(from calc(var(--beam,0deg) + 90deg - 80deg),transparent 0deg,color-mix(in srgb,var(--accent) 80%,#fff) 79deg,transparent 80deg);
+  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 2.5px),#000 calc(100% - 2.5px));mask:radial-gradient(farthest-side,transparent calc(100% - 2.5px),#000 calc(100% - 2.5px))}
+/* cabeza del haz */
+.beam{position:absolute;inset:-1.5px;border-radius:50%;pointer-events:none;transform:rotate(var(--beam,0deg))}
+.beam::after{content:"";position:absolute;right:-4px;top:50%;width:8px;height:8px;margin-top:-4px;border-radius:50%;background:#fff;
+  box-shadow:0 0 6px 2px color-mix(in srgb,var(--accent) 80%,#fff),0 0 16px 5px color-mix(in srgb,var(--accent) 45%,transparent)}
+@media (prefers-reduced-motion:reduce){.orbit::before,.beam{display:none}}
+/* el centro es un orbe de energía sutil: esfera violeta con un velo de plasma muy tenue que gira despacio y un halo suave */
+.orb{position:relative;isolation:isolate;width:60%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;text-align:center;color:#fff;
   transform:perspective(700px) rotateX(var(--ty,0deg)) rotateY(var(--tx,0deg));transition:transform .5s var(--ease);
-  background:radial-gradient(circle at var(--hx,32%) var(--hy,26%),rgba(255,255,255,.55) 0,rgba(255,255,255,0) 42%),
-    radial-gradient(circle at 40% 36%,color-mix(in srgb,var(--accent) 60%,#fff) 0,var(--accent) 50%,color-mix(in srgb,var(--accent) 55%,#0B0A1E) 100%);
-  box-shadow:inset -12px -14px 28px rgba(10,8,30,.42),inset 6px 8px 18px rgba(255,255,255,.2),0 0 0 1px rgba(255,255,255,.1)}
-/* energía: un halo que late detrás del núcleo */
-.orb::before{content:"";position:absolute;inset:-34%;z-index:-1;border-radius:50%;pointer-events:none;
-  background:radial-gradient(closest-side,color-mix(in srgb,var(--accent) 55%,transparent),color-mix(in srgb,var(--accent) 18%,transparent) 55%,transparent);
-  animation:energy 2.6s ease-in-out infinite}
-@keyframes energy{0%,100%{opacity:.55;transform:scale(.88)}50%{opacity:1;transform:scale(1.06)}}
-.orb strong{position:relative;font-size:calc(var(--hw) * .074);font-weight:600;font-stretch:80%;letter-spacing:-.02em;line-height:1;color:#fff;text-shadow:0 1px 8px rgba(10,8,30,.45)}
+  background:radial-gradient(circle at var(--hx,40%) var(--hy,34%),color-mix(in srgb,var(--accent) 38%,#fff) 0,var(--accent) 52%,color-mix(in srgb,var(--accent) 68%,#1B0F45) 100%);
+  box-shadow:inset 0 0 16px 1px color-mix(in srgb,var(--accent) 40%,#fff),inset -10px -12px 24px rgba(15,10,40,.28),0 0 26px 2px color-mix(in srgb,var(--accent) 28%,transparent)}
+.orb::before{content:"";position:absolute;inset:-22%;z-index:-1;border-radius:50%;pointer-events:none;
+  background:radial-gradient(closest-side,color-mix(in srgb,var(--accent) 30%,transparent),transparent);animation:energy 4.5s ease-in-out infinite}
+@keyframes energy{0%,100%{opacity:.45;transform:scale(.94)}50%{opacity:.8;transform:scale(1.02)}}
+.plasma,.plasma::before,.plasma::after{position:absolute;inset:0;border-radius:50%;pointer-events:none}
+.plasma{overflow:hidden}
+.plasma::before,.plasma::after{content:"";mix-blend-mode:screen;filter:blur(2.5px);opacity:.22;
+  -webkit-mask:radial-gradient(circle,transparent 10%,#000 30%,#000 55%,transparent 72%);mask:radial-gradient(circle,transparent 10%,#000 30%,#000 55%,transparent 72%)}
+.plasma::before{background:repeating-conic-gradient(from 10deg,transparent 0 34deg,#fff 36deg,transparent 40deg 52deg);animation:plasma 40s linear infinite}
+.plasma::after{background:repeating-conic-gradient(from 0deg,transparent 0 44deg,#fff 46deg,transparent 50deg 66deg);animation:plasma 56s linear infinite reverse}
+@keyframes plasma{to{transform:rotate(1turn)}}
+.orb strong{position:relative;font-size:calc(var(--hw) * .088);font-weight:600;font-stretch:80%;letter-spacing:-.02em;line-height:1;color:#fff;text-shadow:0 1px 8px rgba(15,10,40,.4)}
 /* «Stack principal» debajo del sistema, en pequeño */
 .hub .k{display:block;margin-top:30px;font-size:12px;font-weight:500;color:var(--muted);letter-spacing:.01em}
 .orb::after{content:"";position:absolute;inset:0;border-radius:50%;pointer-events:none;opacity:0}
@@ -504,6 +513,9 @@ dl div:not(.lg) dd{margin-top:4px;text-wrap:balance;font-size:clamp(20px,min(1.7
 .core .pb{all:unset;position:absolute;left:-20px;top:-20px;display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:light-dark(#fff,#1A1E2C);cursor:pointer;
   box-shadow:0 0 0 1px var(--glass-edge),0 6px 16px -8px light-dark(rgba(30,20,90,.35),rgba(0,0,0,.8));transform:rotate(calc(var(--rot,0deg) * -1));transition:box-shadow .25s}
 .core .pb:hover{box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 50%,transparent),0 6px 16px -6px var(--accent)}
+/* el nodo se enciende cuando el haz pasa por él y se apaga poco a poco */
+.core .pb{transition:box-shadow 1s ease-out}
+.core .pb.lit{transition:box-shadow .08s;box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 75%,#fff),0 0 18px 6px color-mix(in srgb,var(--accent) 50%,transparent)}
 @keyframes orbit{to{transform:rotate(1turn)}}
 .core .pb:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .core .pb[aria-pressed=true]{box-shadow:0 0 0 2px var(--accent),0 6px 16px -6px var(--accent)}
@@ -1244,10 +1256,9 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
     const group = s => `<section class="sg"><header>${ui(s.icon)}<h3>${esc(tx(s.name))}</h3></header>
       <ul class="pills">${s.items.map(i => `<li data-u="${where(i)}"><button class="pb" type="button" aria-pressed="false" data-t="${esc(i)}">${ic(i)}${esc(tn(i))}</button></li>`).join('')}</ul></section>`;
     $('skills').innerHTML = `<div class="skcol l">${[0, 2, 3].map(k => group(skills[k])).join('')}</div>
-      <div class="hub"><div class="sys"><div class="orbit" aria-hidden="true"></div><svg class="atom" viewBox="-100 -100 200 200" aria-hidden="true"><defs><radialGradient id="atomWave"><stop offset="0" style="stop-color:var(--accent);stop-opacity:0"/><stop offset=".72" style="stop-color:var(--accent);stop-opacity:.2"/><stop offset="1" style="stop-color:var(--accent);stop-opacity:0"/></radialGradient><clipPath id="atomFront"><rect x="-110" y="0" width="220" height="110"/></clipPath></defs>${[0, 1, 2].map(i => `<circle class="wave" r="26" fill="url(#atomWave)" opacity="0"><animate attributeName="r" values="26;100" dur="3.6s" begin="${i * 1.2}s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;0" dur="3.6s" begin="${i * 1.2}s" repeatCount="indefinite"/></circle>`).join('')}${[0, 60, 120].map((a, i) => `<g transform="rotate(${a})"><ellipse class="shell" rx="84" ry="27"/><circle class="e" r="3.6"><animateMotion dur="${(2.6 + i * .9).toFixed(1)}s" repeatCount="indefinite" path="M84,0 A84,27 0 1,1 -84,0 A84,27 0 1,1 84,0"/></circle></g>`).join('')}</svg><div class="orb"><strong>${esc(L().coreName)}</strong></div><svg class="atom front" viewBox="-100 -100 200 200" aria-hidden="true">${[0, 60, 120].map((a, i) => `<g transform="rotate(${a})"><g clip-path="url(#atomFront)"><ellipse class="shell" rx="84" ry="27"/><circle class="e" r="3.6"><animateMotion dur="${(2.6 + i * .9).toFixed(1)}s" repeatCount="indefinite" path="M84,0 A84,27 0 1,1 -84,0 A84,27 0 1,1 84,0"/></circle></g></g>`).join('')}</svg>
+      <div class="hub"><div class="sys"><div class="orbit" aria-hidden="true"><i class="beam"></i></div><div class="orb"><span class="plasma" aria-hidden="true"></span><strong>${esc(L().coreName)}</strong></div>
         <ul class="core">${core.map((i, k) => `<li style="--a:${k * 360 / core.length - 90}deg"><button class="pb" type="button" aria-pressed="false" data-t="${esc(i)}" title="${esc(i)}" aria-label="${esc(i)}">${ic(i)}</button></li>`).join('')}</ul></div><span class="k">${esc(L().core)}</span></div>
       <div class="skcol r">${[1, 4, 5].map(k => group(skills[k])).join('')}</div>`;
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) $('skills').querySelectorAll('.atom').forEach(a => a.pauseAnimations());
   }
 
   // índice: los nombres en grande son el selector; a la derecha, las ventanas de los tres proyectos apiladas
@@ -1400,7 +1411,8 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
      y al elegir una de sus tecnologías la lleva arriba. Tocar el orbe emite una onda y le da un impulso. */
   const still = matchMedia('(prefers-reduced-motion: reduce)');
   const BASE = 6;
-  let rot = 0, vel = BASE, target = null, hovering = false, drag = null, tLast = performance.now();
+  let rot = 0, vel = BASE, target = null, hovering = false, drag = null, tLast = performance.now(), beam = 0;
+  const BEAM = 80; // grados por segundo
   const norm = d => ((d % 360) + 540) % 360 - 180;
   const centre = sys => { const r = sys.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };
   const angleAt = (sys, e) => { const [cx, cy] = centre(sys); return Math.atan2(e.clientY - cy, e.clientX - cx) * 180 / Math.PI; };
@@ -1411,6 +1423,11 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
       if (target != null) { const d = norm(target - rot); rot += still.matches ? d : d * Math.min(1, dt * 5); vel = 0; }
       else { const want = hovering || still.matches ? 0 : BASE; vel += (want - vel) * Math.min(1, dt * (Math.abs(vel) > 40 ? 1.2 : 3)); rot += vel * dt; }
       sys.style.setProperty('--rot', rot + 'deg');
+    }
+    if (sys && !document.hidden && !still.matches) {
+      beam = (beam + BEAM * dt) % 360;
+      sys.style.setProperty('--beam', beam + 'deg');
+      sys.querySelectorAll('.core .pb').forEach((b, k) => { const d = norm(beam - (k * 360 / core.length - 90 + rot)); b.classList.toggle('lit', d >= 0 && d < 14); });
     }
     requestAnimationFrame(spin);
   }
@@ -1433,7 +1450,7 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
       const o = sys.querySelector('.orb'), r = o.getBoundingClientRect();
       const x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
       o.style.setProperty('--tx', (x * 16).toFixed(1) + 'deg'); o.style.setProperty('--ty', (-y * 16).toFixed(1) + 'deg');
-      o.style.setProperty('--hx', (32 + x * 40).toFixed(0) + '%'); o.style.setProperty('--hy', (26 + y * 40).toFixed(0) + '%');
+      o.style.setProperty('--hx', (40 + x * 30).toFixed(0) + '%'); o.style.setProperty('--hy', (34 + y * 30).toFixed(0) + '%');
     }
   });
   sk.addEventListener('pointerdown', e => {
