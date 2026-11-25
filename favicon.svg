@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <style>
+    rect{fill:#0F1222}
+    text{fill:#F5F6F8;font:700 27px "Instrument Sans",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;letter-spacing:-.5px}
+    @media (prefers-color-scheme:dark){rect{fill:#ECEEF4}text{fill:#0C0E14}}
+  </style>
+  <rect width="64" height="64" rx="16"/>
+  <text x="32" y="42" text-anchor="middle">MA</text>
+</svg>
