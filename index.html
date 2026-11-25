@@ -449,7 +449,7 @@ dl div:not(.lg) dd{margin-top:4px;white-space:nowrap;font-size:clamp(20px,min(1.
 
 /* ---------- habilidades: mapa alrededor del stack principal ----------
    Una columna vertebral violeta en el centro con el stack principal en un orbe; cada grupo se une a ella con un trazo. */
-#skills{--hw:clamp(200px,18vw,250px);--g:clamp(28px,3.4vw,56px);position:relative;display:grid;grid-template-columns:minmax(0,1fr) var(--hw) minmax(0,1fr);gap:0 var(--g);align-items:center;margin-inline:0}
+#skills{overflow:visible;--hw:clamp(200px,18vw,250px);--g:clamp(28px,3.4vw,56px);position:relative;display:grid;grid-template-columns:minmax(0,1fr) var(--hw) minmax(0,1fr);gap:0 var(--g);align-items:center;margin-inline:0}
 #skills::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:linear-gradient(transparent,var(--accent) 22% 78%,transparent);opacity:.45}
 .skcol{display:grid;gap:clamp(14px,2.6vh,26px)}
 #skills .sg{padding:0;border:0;background:none;overflow:visible}
@@ -659,7 +659,10 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
   .deck{order:-1;justify-self:stretch;max-width:none;margin-bottom:8px}
   #skills{grid-template-columns:minmax(0,1fr);gap:22px}
   #skills::before,#skills .sg::after{display:none}
-  .hub{order:-1}
+  .hub{order:-1;padding-block:30px 10px}
+  /* tecnologías: objetivos táctiles más altos en móvil */
+  .pills{gap:8px}
+  .pills .pb{min-height:36px;padding:6px 12px}
   .skcol.l .sg header,.skcol.l .sg .pills{justify-content:flex-start;text-align:left}
   .skcol.l .sg header .ui{order:0}
   #skills .sg+.sg{border-top:0}
