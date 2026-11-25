@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Mostafa Abdel-Illah El Ansari</title>
+<title>Mostafa Abdel-illah El Ansari</title>
 <meta name="description" content="Backend Developer .NET en Barcelona. APIs REST y microservicios con C#, ASP.NET Core y Microsoft Azure.">
 <meta name="theme-color" content="#F5F6F8">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -15,21 +15,21 @@
 <link rel="alternate" hreflang="x-default" href="https://mabdelansari.github.io/">
 <!-- vista previa al compartir (LinkedIn, WhatsApp, X…) -->
 <meta property="og:type" content="profile">
-<meta property="og:site_name" content="Mostafa Abdel-Illah El Ansari">
-<meta property="og:title" content="Mostafa Abdel-Illah El Ansari · Backend Developer .NET">
+<meta property="og:site_name" content="Mostafa Abdel-illah El Ansari">
+<meta property="og:title" content="Mostafa Abdel-illah El Ansari · Backend Developer .NET">
 <meta property="og:description" content="Backend Developer .NET en Barcelona. APIs REST y microservicios con C#, ASP.NET Core y Microsoft Azure.">
 <meta property="og:url" content="https://mabdelansari.github.io/">
 <meta property="og:image" content="https://mabdelansari.github.io/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Mostafa Abdel-Illah El Ansari, Backend Developer .NET, C# y Azure">
+<meta property="og:image:alt" content="Mostafa Abdel-illah El Ansari, Backend Developer .NET, C# y Azure">
 <meta property="og:locale" content="es_ES">
 <meta property="og:locale:alternate" content="ca_ES">
 <meta property="og:locale:alternate" content="en_GB">
 <meta property="profile:first_name" content="Mostafa">
-<meta property="profile:last_name" content="Abdel-Illah El Ansari">
+<meta property="profile:last_name" content="Abdel-illah El Ansari">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Mostafa Abdel-Illah El Ansari · Backend Developer .NET">
+<meta name="twitter:title" content="Mostafa Abdel-illah El Ansari · Backend Developer .NET">
 <meta name="twitter:description" content="APIs REST y microservicios con C#, ASP.NET Core y Microsoft Azure.">
 <meta name="twitter:image" content="https://mabdelansari.github.io/og.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -402,7 +402,7 @@ dl{background:none;backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:
 dl{grid-template-columns:auto minmax(0,1fr) auto}
 dl div{padding:clamp(12px,2vh,18px) 20px}
 dl div:first-child,dl .lg{padding-left:0}
-dl div:not(.lg) dd{margin-top:4px;white-space:nowrap;font-size:clamp(20px,min(1.7vw,3.2vh),26px);font-weight:600;font-stretch:80%;letter-spacing:-.02em;line-height:1.05}
+dl div:not(.lg) dd{margin-top:4px;text-wrap:balance;font-size:clamp(20px,min(1.7vw,3.2vh),26px);font-weight:600;font-stretch:80%;letter-spacing:-.02em;line-height:1.05}
 .detail{--gx:clamp(18px,2vw,28px)}
 .detail .xh{padding:0 0 clamp(16px,2.6vh,24px)}
 .groups{margin-inline:calc(var(--gx) * -1)}
@@ -446,10 +446,14 @@ dl div:not(.lg) dd{margin-top:4px;white-space:nowrap;font-size:clamp(20px,min(1.
 .xpw .grp h4{margin-bottom:6px}
 .xpw .grp ul{font-size:14px;line-height:1.45}
 .xpw .grp li+li{margin-top:4px}
+.xpw .detail .xh{border-bottom:0}
+.xpw .groups{gap:clamp(16px,2.6vh,26px) clamp(24px,3vw,48px);margin:clamp(6px,1.4vh,14px) 0 0}
+.xpw .grp,.xpw .grp+.grp,.xpw .groups[data-n="3"] .grp{border:0;padding:0}
+.xpw .grp::before{inset:-10px -14px;border-radius:14px}
 
 /* ---------- habilidades: mapa alrededor del stack principal ----------
    Una columna vertebral violeta en el centro con el stack principal en un orbe; cada grupo se une a ella con un trazo. */
-#skills{overflow:visible;--hw:clamp(200px,18vw,250px);--g:clamp(28px,3.4vw,56px);position:relative;display:grid;grid-template-columns:minmax(0,1fr) var(--hw) minmax(0,1fr);gap:0 var(--g);align-items:center;margin-inline:0}
+#skills{overflow:visible;--hw:clamp(190px,16vw,226px);--g:clamp(28px,3.4vw,56px);position:relative;display:grid;grid-template-columns:minmax(0,1fr) var(--hw) minmax(0,1fr);gap:0 var(--g);align-items:center;margin-inline:0}
 #skills::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:linear-gradient(transparent,var(--accent) 22% 78%,transparent);opacity:.45}
 .skcol{display:grid;gap:clamp(14px,2.6vh,26px)}
 #skills .sg{padding:0;border:0;background:none;overflow:visible}
@@ -461,7 +465,7 @@ dl div:not(.lg) dd{margin-top:4px;white-space:nowrap;font-size:clamp(20px,min(1.
 .skcol.l .sg .pills{justify-content:flex-end}
 .skcol.l .sg header .ui{order:2}
 #skills .sg:hover::after{background:var(--accent)}
-.hub{position:relative;z-index:1;display:grid;place-items:center}
+.hub{position:relative;z-index:1;display:grid;place-items:center;padding-block:20px}
 /* orbe: un disco suave con dos órbitas finas; las cuatro tecnologías base giran sobre la órbita exterior */
 .orb{position:relative;width:var(--hw);aspect-ratio:1;border-radius:50%;display:grid;place-content:center;justify-items:center;gap:4px;text-align:center;color:var(--ink);
   background:radial-gradient(circle,color-mix(in srgb,var(--accent) 13%,var(--bg)) 0 44%,color-mix(in srgb,var(--accent) 5%,transparent) 45% 70%,transparent 71%)}
@@ -470,11 +474,14 @@ dl div:not(.lg) dd{margin-top:4px;white-space:nowrap;font-size:clamp(20px,min(1.
 .orb::after{inset:20%;border:1px solid color-mix(in srgb,var(--accent) 22%,transparent)}
 .orb .k{position:relative;font-size:11.5px;font-weight:500;color:var(--muted)}
 .orb strong{position:relative;font-size:clamp(24px,2.1vw,30px);font-weight:600;font-stretch:80%;letter-spacing:-.02em;line-height:1;color:var(--accent)}
-.core{position:absolute;inset:0;list-style:none;margin:0;padding:0}
-.core li{position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-50%)}
-.core .pb{all:unset;display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:light-dark(#fff,#1A1E2C);cursor:pointer;
-  box-shadow:0 0 0 1px var(--glass-edge),0 6px 16px -8px light-dark(rgba(30,20,90,.35),rgba(0,0,0,.8));transition:transform .25s var(--ease),box-shadow .25s}
-.core .pb:hover{transform:scale(1.08)}
+/* la órbita gira despacio y cada icono contrarrota para quedarse derecho; se para al señalarla y con movimiento reducido */
+.core{position:absolute;inset:0;list-style:none;margin:0;padding:0;animation:orbit 60s linear infinite}
+.core li{position:absolute;left:50%;top:50%;width:0;height:0;transform:rotate(var(--a)) translateX(calc(var(--hw) / 2)) rotate(calc(var(--a) * -1))}
+.core .pb{all:unset;position:absolute;left:-20px;top:-20px;display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:light-dark(#fff,#1A1E2C);cursor:pointer;
+  box-shadow:0 0 0 1px var(--glass-edge),0 6px 16px -8px light-dark(rgba(30,20,90,.35),rgba(0,0,0,.8));animation:orbit 60s linear infinite reverse;transition:box-shadow .25s}
+.core .pb:hover{box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 50%,transparent),0 6px 16px -6px var(--accent)}
+.orb:hover .core,.orb:hover .core .pb,.core:focus-within,.core:focus-within .pb{animation-play-state:paused}
+@keyframes orbit{to{transform:rotate(1turn)}}
 .core .pb:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .core .pb[aria-pressed=true]{box-shadow:0 0 0 2px var(--accent),0 6px 16px -6px var(--accent)}
 .core .ti{width:20px;height:20px}
@@ -551,6 +558,9 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
 .win .bar span{margin-left:10px;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .win img,.win .ill{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;object-position:top center}
 
+/* cambio de idioma: se repinta sin transiciones para que no parpadee */
+.swapping *,.swapping *::before,.swapping *::after{transition:none!important}
+
 /* ---------- pantallas bajas de portátil (≈ 1280×720) ---------- */
 @media (min-width:821px) and (max-height:780px){
   .wrap{padding-block:18px}
@@ -584,7 +594,7 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
   .pinfo .tags{margin-top:10px}
   .pinfo .acts{margin-top:14px}
   .also{font-size:14px}
-  #skills{--hw:190px}
+  #skills{--hw:180px}
   /* en pantallas bajas la captura se recorta por abajo (siempre igual, sin zoom) para que la sección quepa */
   .list li{padding:6px 0}
   #sobre-mi dl{margin-bottom:16px}
@@ -626,6 +636,8 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
     padding:calc(72px + env(safe-area-inset-top)) 20px max(24px,env(safe-area-inset-bottom));
     background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);animation:sheet .35s var(--ease) both}
   @keyframes sheet{from{opacity:0;transform:translateY(-10px)}}
+  .sheet.out{pointer-events:none;animation:sheet-out .32s var(--ease) both}
+  @keyframes sheet-out{to{opacity:0;transform:translateY(-6px)}}
   .sheet-n{display:grid;border-top:1px solid var(--line)}
   .sn{display:flex;align-items:center;gap:0;min-height:56px;padding:8px 0;border-bottom:1px solid var(--line);color:var(--ink);text-decoration:none;
     font-size:clamp(30px,9vw,40px);font-weight:600;font-stretch:80%;letter-spacing:-.025em;line-height:1.1}
@@ -736,9 +748,9 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
 <div class="app">
 
   <header class="top">
-    <a class="brand" href="#inicio" aria-label="Mostafa Abdel-Illah, ir al inicio" data-ka="brand">
+    <a class="brand" href="#inicio" aria-label="Mostafa Abdel-illah, ir al inicio" data-ka="brand">
       <span class="mk" aria-hidden="true">MA</span>
-      <span><strong>Mostafa Abdel-Illah</strong><small>Backend Developer .NET</small></span>
+      <span><strong>Mostafa Abdel-illah</strong><small>Backend Developer .NET</small></span>
     </a>
     <p class="now-s" aria-hidden="true" id="nowS">Inicio</p>
     <nav class="tabs" id="tabs" aria-label="Secciones" data-ka="nav">
@@ -788,7 +800,7 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
       <section class="slide" id="inicio" aria-label="Inicio" data-ka="t.inicio"><div class="wrap hero">
         <div class="intro">
           <p class="avail in" style="--d:.05s"><i aria-hidden="true"></i><span data-k="avail">Abierto a nuevas oportunidades en Barcelona o en remoto</span></p>
-          <h1 class="in" style="--d:.15s">Mostafa Abdel&#8209;Illah El Ansari</h1>
+          <h1 class="in" style="--d:.15s">Mostafa Abdel&#8209;illah El Ansari</h1>
           <p class="role in" style="--d:.3s" data-k="role">Backend Developer .NET, C# y Azure</p>
           <p class="lead in" style="--d:.38s" data-k="lead">Desarrollo APIs REST y microservicios con C# y ASP.NET Core sobre Microsoft Azure. Más de 3 años construyendo, manteniendo y dando soporte a sistemas en producción.</p>
           <div class="btns in" style="--d:.46s">
@@ -798,7 +810,7 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
           </div>
         </div>
         <figure class="photo in" style="--d:.2s">
-          <img src="profile.jpg" alt="Foto de Mostafa Abdel-Illah El Ansari" data-kalt="photo" width="800" height="800">
+          <img src="profile.jpg" alt="Foto de Mostafa Abdel-illah El Ansari" data-kalt="photo" width="800" height="800">
           <figcaption><span class="logo sm"><img src="img/raona.png" alt="Logo de Raona" width="300" height="300"></span><div><strong data-k="cap.role">Backend Developer en Raona</strong><span data-k="cap.since">Desde diciembre de 2023</span></div></figcaption>
         </figure>
         <h2 class="sr" data-k="career">Trayectoria</h2>
@@ -882,7 +894,7 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
             <li><a href="cv.pdf" target="_blank" rel="noopener"><span class="ci" aria-hidden="true"><svg class="ui" aria-hidden="true"><use href="#i-doc"/></svg></span><strong data-k="cvrow">Currículum</strong><small data-k="cvsub">Abrir en PDF</small><span class="go" aria-hidden="true"><svg class="ui" aria-hidden="true"><use href="#i-arrow"/></svg></span></a></li>
           </ul>
         </div>
-        <p class="foot">© <span id="year">2026</span> Mostafa Abdel-Illah El Ansari. <span data-k="foot">Hecho a mano y publicado en GitHub Pages.</span></p>
+        <p class="foot">© <span id="year">2026</span> Mostafa Abdel-illah El Ansari.</p>
       </div></section>
 
     </div>
@@ -910,12 +922,12 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
   const LANGS = ['es', 'ca', 'en'];
   const I = {
     es: {
-      title: 'Mostafa Abdel-Illah El Ansari', desc: 'Backend Developer .NET en Barcelona. APIs REST y microservicios con C#, ASP.NET Core y Microsoft Azure.',
-      lang: 'Idioma', menu: 'Menú', brand: 'Mostafa Abdel-Illah, ir al inicio', nav: 'Secciones', theme: 'Cambiar entre modo claro y oscuro', contact: 'Contactar',
+      title: 'Mostafa Abdel-illah El Ansari', desc: 'Backend Developer .NET en Barcelona. APIs REST y microservicios con C#, ASP.NET Core y Microsoft Azure.',
+      lang: 'Idioma', menu: 'Menú', brand: 'Mostafa Abdel-illah, ir al inicio', nav: 'Secciones', theme: 'Cambiar entre modo claro y oscuro', contact: 'Contactar',
       't.inicio': 'Inicio', 't.sobre': 'Sobre mí', 't.xp': 'Experiencia', 't.sk': 'Habilidades', 't.pj': 'Proyectos', 't.ct': 'Contacto',
       avail: 'Abierto a nuevas oportunidades en Barcelona o en remoto', role: 'Backend Developer .NET, C# y Azure',
       lead: 'Desarrollo APIs REST y microservicios con C# y ASP.NET Core sobre Microsoft Azure. Más de 3 años construyendo, manteniendo y dando soporte a sistemas en producción.',
-      cv: 'Ver CV', photo: 'Foto de Mostafa Abdel-Illah El Ansari', 'cap.role': 'Backend Developer en Raona', 'cap.since': 'Desde diciembre de 2023', career: 'Trayectoria',
+      cv: 'Ver CV', photo: 'Foto de Mostafa Abdel-illah El Ansari', 'cap.role': 'Backend Developer en Raona', 'cap.since': 'Desde diciembre de 2023', career: 'Trayectoria',
       big: 'Soy desarrollador backend especializado en el ecosistema .NET y Microsoft Azure. Me gusta el código mantenible, bien testeado y pensado para crecer.',
       p1: 'En Raona desarrollo funcionalidades de principio a fin: APIs y microservicios, procesos asíncronos con colas, almacenamiento en Azure y servicios de Windows para la transferencia de ficheros. También participo en el análisis y la estimación de tareas y en la resolución de incidencias en producción.',
       p2: 'Aplico SOLID, Clean Architecture y patrones de diseño, y uso herramientas de IA como Claude y OpenAI Codex para trabajar de forma más rápida y precisa.',
@@ -927,7 +939,7 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
       also: '<strong>También he trabajado con</strong> React, Next.js, Node.js, Express, Laravel, Java, MongoDB, Firestore, Tailwind CSS, Linux y NGINX. <span class="hint-sk">Pulsa una tecnología para ver dónde la he usado.</span>',
       shp: 'Lo que construyo fuera del trabajo.', pjnav: 'Elige un proyecto', preview: 'Vista previa de', visit: 'Visitar', code: 'Ver el código en GitHub',
       ct: '¿Hablamos?', ctp: 'Estoy abierto a ofertas de Backend Developer .NET en Barcelona o en remoto. Escríbeme y te respondo lo antes posible.',
-      cvrow: 'Currículum', cvsub: 'Abrir en PDF', foot: 'Hecho a mano y publicado en GitHub Pages.',
+      cvrow: 'Currículum', cvsub: 'Abrir en PDF',
       prev: 'Sección anterior', next: 'Sección siguiente', hint: 'Muévete con <kbd>←</kbd> <kbd>→</kbd> o la rueda del ratón', of: 'de', close: 'Cerrar',
       y: ['año', 'años'], m: ['mes', 'meses'], and: 'y',
       fused: (n, w) => `${n} tecnologías usadas en ${w}`, fall: 'Todas las tecnologías', fmine: 'mis proyectos',
@@ -935,12 +947,12 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
       noUse: 'El CV no la asocia a un empleo ni a un proyecto concretos.', see: 'Ver'
     },
     ca: {
-      title: 'Mostafa Abdel-Illah El Ansari', desc: 'Backend Developer .NET a Barcelona. APIs REST i microserveis amb C#, ASP.NET Core i Microsoft Azure.',
-      lang: 'Idioma', menu: 'Menú', brand: "Mostafa Abdel-Illah, anar a l'inici", nav: 'Seccions', theme: 'Canviar entre mode clar i fosc', contact: 'Contactar',
+      title: 'Mostafa Abdel-illah El Ansari', desc: 'Backend Developer .NET a Barcelona. APIs REST i microserveis amb C#, ASP.NET Core i Microsoft Azure.',
+      lang: 'Idioma', menu: 'Menú', brand: "Mostafa Abdel-illah, anar a l'inici", nav: 'Seccions', theme: 'Canviar entre mode clar i fosc', contact: 'Contactar',
       't.inicio': 'Inici', 't.sobre': 'Sobre mi', 't.xp': 'Experiència', 't.sk': 'Habilitats', 't.pj': 'Projectes', 't.ct': 'Contacte',
       avail: 'Obert a noves oportunitats a Barcelona o en remot', role: 'Backend Developer .NET, C# i Azure',
       lead: 'Desenvolupo APIs REST i microserveis amb C# i ASP.NET Core sobre Microsoft Azure. Més de 3 anys construint, mantenint i donant suport a sistemes en producció.',
-      cv: 'Veure el CV', photo: 'Foto de Mostafa Abdel-Illah El Ansari', 'cap.role': 'Backend Developer a Raona', 'cap.since': 'Des de desembre de 2023', career: 'Trajectòria',
+      cv: 'Veure el CV', photo: 'Foto de Mostafa Abdel-illah El Ansari', 'cap.role': 'Backend Developer a Raona', 'cap.since': 'Des de desembre de 2023', career: 'Trajectòria',
       big: "Soc desenvolupador backend especialitzat en l'ecosistema .NET i Microsoft Azure. M'agrada el codi mantenible, ben testejat i pensat per créixer.",
       p1: "A Raona desenvolupo funcionalitats de principi a fi: APIs i microserveis, processos asíncrons amb cues, emmagatzematge a Azure i serveis de Windows per a la transferència de fitxers. També participo en l'anàlisi i l'estimació de tasques i en la resolució d'incidències en producció.",
       p2: "Aplico SOLID, Clean Architecture i patrons de disseny, i faig servir eines d'IA com Claude i OpenAI Codex per treballar de manera més ràpida i precisa.",
@@ -952,7 +964,7 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
       also: "<strong>També he treballat amb</strong> React, Next.js, Node.js, Express, Laravel, Java, MongoDB, Firestore, Tailwind CSS, Linux i NGINX. <span class=\"hint-sk\">Prem una tecnologia per veure on l'he fet servir.</span>",
       shp: 'El que construeixo fora de la feina.', pjnav: 'Tria un projecte', preview: 'Previsualització de', visit: 'Visitar', code: 'Veure el codi a GitHub',
       ct: 'En parlem?', ctp: "Estic obert a ofertes de Backend Developer .NET a Barcelona o en remot. Escriu-me i et respondré tan aviat com pugui.",
-      cvrow: 'Currículum', cvsub: 'Obrir en PDF', foot: 'Fet a mà i publicat a GitHub Pages.',
+      cvrow: 'Currículum', cvsub: 'Obrir en PDF',
       prev: 'Secció anterior', next: 'Secció següent', hint: 'Mou-te amb <kbd>←</kbd> <kbd>→</kbd> o la roda del ratolí', of: 'de', close: 'Tancar',
       y: ['any', 'anys'], m: ['mes', 'mesos'], and: 'i',
       fused: (n, w) => `${n} tecnologies fetes servir a ${w}`, fall: 'Totes les tecnologies', fmine: 'els meus projectes',
@@ -960,12 +972,12 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
       noUse: 'El CV no la vincula a cap feina ni a cap projecte concret.', see: 'Veure'
     },
     en: {
-      title: 'Mostafa Abdel-Illah El Ansari', desc: '.NET Backend Developer in Barcelona. REST APIs and microservices with C#, ASP.NET Core and Microsoft Azure.',
-      lang: 'Language', menu: 'Menu', brand: 'Mostafa Abdel-Illah, go to top', nav: 'Sections', theme: 'Switch between light and dark mode', contact: 'Contact me',
+      title: 'Mostafa Abdel-illah El Ansari', desc: '.NET Backend Developer in Barcelona. REST APIs and microservices with C#, ASP.NET Core and Microsoft Azure.',
+      lang: 'Language', menu: 'Menu', brand: 'Mostafa Abdel-illah, go to top', nav: 'Sections', theme: 'Switch between light and dark mode', contact: 'Contact me',
       't.inicio': 'Home', 't.sobre': 'About', 't.xp': 'Experience', 't.sk': 'Skills', 't.pj': 'Projects', 't.ct': 'Contact',
       avail: 'Open to new opportunities in Barcelona or remote', role: '.NET Backend Developer, C# and Azure',
       lead: 'I build REST APIs and microservices with C# and ASP.NET Core on Microsoft Azure. Over 3 years building, maintaining and supporting production systems.',
-      cv: 'View CV', photo: 'Photo of Mostafa Abdel-Illah El Ansari', 'cap.role': 'Backend Developer at Raona', 'cap.since': 'Since December 2023', career: 'Career path',
+      cv: 'View CV', photo: 'Photo of Mostafa Abdel-illah El Ansari', 'cap.role': 'Backend Developer at Raona', 'cap.since': 'Since December 2023', career: 'Career path',
       big: "I'm a backend developer specialised in the .NET ecosystem and Microsoft Azure. I like code that is maintainable, well tested and built to grow.",
       p1: 'At Raona I build features end to end: APIs and microservices, asynchronous processing with queues, Azure storage and Windows services for file transfer. I also take part in task analysis and estimation and in resolving production incidents.',
       p2: 'I apply SOLID, Clean Architecture and design patterns, and use AI tools such as Claude and OpenAI Codex to work faster and more precisely.',
@@ -977,7 +989,7 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
       also: '<strong>I have also worked with</strong> React, Next.js, Node.js, Express, Laravel, Java, MongoDB, Firestore, Tailwind CSS, Linux and NGINX. <span class="hint-sk">Tap a technology to see where I have used it.</span>',
       shp: 'What I build outside work.', pjnav: 'Choose a project', preview: 'Preview of', visit: 'Visit', code: 'View the code on GitHub',
       ct: "Let's talk", ctp: "I'm open to .NET Backend Developer roles in Barcelona or remote. Write to me and I'll get back to you as soon as I can.",
-      cvrow: 'Résumé', cvsub: 'Open as PDF', foot: 'Handmade and published on GitHub Pages.',
+      cvrow: 'Résumé', cvsub: 'Open as PDF',
       prev: 'Previous section', next: 'Next section', hint: 'Move with <kbd>←</kbd> <kbd>→</kbd> or the mouse wheel', of: 'of', close: 'Close',
       y: ['year', 'years'], m: ['month', 'months'], and: 'and',
       fused: (n, w) => `${n} technologies used at ${w}`, fall: 'All technologies', fmine: 'my projects',
@@ -1090,7 +1102,7 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
   // dónde se usó cada tecnología del mapa: r = Raona, s = Soficat Xerox (según el CV y lo confirmado por Mostafa);
   // p = proyectos propios, calculado a partir de projects[].uses para que el filtro y la ficha digan siempre lo mismo
   const used = {
-    r:['C#','.NET','ASP.NET Core','Entity Framework Core','Windows Services','Azure Functions','Storage Queues','Blob Storage','Table Storage','Application Insights','Azure DevOps','CI/CD',
+    r:['C#','.NET','ASP.NET Core','Azure','Entity Framework Core','Windows Services','Azure Functions','Storage Queues','Blob Storage','Table Storage','Application Insights','Azure DevOps','CI/CD',
        'SQL Server','Azure Cosmos DB','JSON','XML','XSL/XSLT','APIs REST','Microservicios','JWT','OWASP','xUnit','Moq','Scrum','LINQ','Git','GitFlow',
        'Clean Architecture','SOLID','Patrones de diseño','Angular','Claude','OpenAI Codex','Agentes de IA','Agent Skills','AGENTS.md','Prompt engineering','Jira'],
     s:['PHP','Symfony','MySQL','Docker','APIs REST','JWT','JavaScript','HTML5','CSS3 / SCSS','Bootstrap','Scrum'],
@@ -1170,13 +1182,13 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
   }
 
   // mapa: el stack principal en el centro y los seis grupos a los lados, unidos a él
-  const core = ['C#', '.NET', 'ASP.NET Core', 'SQL Server'];
+  const core = ['C#', '.NET', 'ASP.NET Core', 'Azure', 'SQL Server', 'Git'];
   function renderSkills() {
     const group = s => `<section class="sg"><header>${ui(s.icon)}<h3>${esc(tx(s.name))}</h3></header>
       <ul class="pills">${s.items.map(i => `<li data-u="${where(i)}"><button class="pb" type="button" aria-pressed="false" data-t="${esc(i)}">${ic(i)}${esc(tn(i))}</button></li>`).join('')}</ul></section>`;
     $('skills').innerHTML = `<div class="skcol l">${[0, 2, 3].map(k => group(skills[k])).join('')}</div>
       <div class="hub"><div class="orb"><span class="k">${esc(L().core)}</span><strong>${esc(L().coreName)}</strong>
-        <ul class="core">${core.map((i, k) => `<li style="--x:${[14.6, 85.4, 85.4, 14.6][k]}%;--y:${[14.6, 14.6, 85.4, 85.4][k]}%"><button class="pb" type="button" aria-pressed="false" data-t="${esc(i)}" title="${esc(i)}" aria-label="${esc(i)}">${ic(i)}</button></li>`).join('')}</ul></div></div>
+        <ul class="core">${core.map((i, k) => `<li style="--a:${k * 360 / core.length - 90}deg"><button class="pb" type="button" aria-pressed="false" data-t="${esc(i)}" title="${esc(i)}" aria-label="${esc(i)}">${ic(i)}</button></li>`).join('')}</ul></div></div>
       <div class="skcol r">${[1, 4, 5].map(k => group(skills[k])).join('')}</div>`;
   }
 
@@ -1184,13 +1196,18 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
   function renderProjects() {
     $('pjs').innerHTML = projects.map((p, k) =>
       `<li><button class="pn" type="button" data-p="${k}" aria-pressed="false" aria-controls="pdetail">${ui('arrow')}<strong>${esc(p.name)}</strong><span>${esc(tx(p.kind))}${p.status ? ', ' + esc(tx(p.status).toLowerCase()) : ''}</span></button></li>`).join('');
+    if ($('deck').children.length) {
+      $('deck').querySelectorAll('.win').forEach(w => { const p = projects[+w.dataset.p], im = w.querySelector('img');
+        if (im) im.alt = `${L().preview} ${p.name}`; else w.querySelector('.ill').innerHTML = p.ill.map(([a, b]) => `<p><b>${esc(tx(a))}</b>${esc(tx(b))}</p>`).join(''); });
+      return;
+    }
     $('deck').innerHTML = projects.map((p, k) =>
       `<figure class="win" data-p="${k}"><div class="bar" aria-hidden="true"><i></i><i></i><i></i><span>${esc(host(p.url))}</span></div>${p.shot
         ? `<img src="${p.shot}" alt="${esc(L().preview)} ${esc(p.name)}">`
         : `<div class="ill" aria-hidden="true">${p.ill.map(([a, b]) => `<p><b>${esc(tx(a))}</b>${esc(tx(b))}</p>`).join('')}</div>`}</figure>`).join('');
   }
   let proj = -1;
-  function showProj(k) {
+  function showProj(k, quiet) {
     if (k === proj) return;
     proj = k;
     const p = projects[k], d = $('pdetail'), n = projects.length;
@@ -1200,7 +1217,7 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
     const label = p.code ? L().code : `${L().visit} ${host(p.url)}`;
     d.innerHTML = `<p>${esc(tx(p.text))}</p>${tags(p.tags)}
       <div class="acts"><a class="btn main" href="${esc(p.url)}" target="_blank" rel="noopener">${esc(label)}${ui('arrow')}</a></div>`;
-    d.classList.remove('swap'); void d.offsetWidth; d.classList.add('swap');
+    if (!quiet) { d.classList.remove('swap'); void d.offsetWidth; d.classList.add('swap'); }
   }
   $('pjs').addEventListener('click', e => { const b = e.target.closest('.pn'); if (b) showProj(+b.dataset.p); });
   $('deck').addEventListener('click', e => { const w = e.target.closest('.win:not(.front)'); if (w) showProj(+w.dataset.p); });
@@ -1264,14 +1281,14 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
 
   /* ---- experiencia ---- */
   let job = -1;
-  function showJob(k) {
+  function showJob(k, quiet) {
     if (k === job) return;
     job = k;
     const j = jobs[k], d = $('detail');
     $('jobs').querySelectorAll('.tj:not(.ms)').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.job === k)));
     d.innerHTML = `<div class="xh"><div class="who"><div><div class="ttl"><h3>${esc(j.role)}</h3><span class="dur">${dur(j.when)}</span></div><p class="co">${esc(tx(j.co))}, ${esc(fmtWhen(j.when).toLowerCase())}</p></div></div>${tags(j.tags)}</div>
       <div class="groups" data-n="${j.groups.length}">${j.groups.map(g => `<section class="grp"><h4>${ui(g.icon)}${esc(tx(g.t))}</h4><ul>${g.items.map(i => `<li>${esc(tx(i))}</li>`).join('')}</ul></section>`).join('')}</div>`;
-    d.classList.remove('swap'); void d.offsetWidth; d.classList.add('swap');
+    if (!quiet) { d.classList.remove('swap'); void d.offsetWidth; d.classList.add('swap'); }
   }
   // en móvil el detalle queda debajo del recorrido: al elegir un empleo, se desplaza hasta él
   $('jobs').addEventListener('click', e => { const b = e.target.closest('.tj:not(.ms)'); if (!b) return; showJob(+b.dataset.job); if (matchMedia('(max-width:820px)').matches) $('detail').scrollIntoView({behavior: 'smooth', block: 'start'}); });
@@ -1370,15 +1387,17 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
   /* ---- idioma: ?lang= en la URL, si no el guardado, si no el del navegador; por defecto español ---- */
   function setLang(l, save) {
     lang = LANGS.includes(l) ? l : 'es';
+    document.documentElement.classList.add('swapping');
     if (save) try { localStorage.setItem('lang', lang); } catch {}
     applyStatic();
     renderCareer(); renderSkills(); renderProjects(); renderLangs();
     const j = job < 0 ? 0 : job, p = proj < 0 ? 0 : proj;
-    job = -1; showJob(j);
-    proj = -1; showProj(p);
+    job = -1; showJob(j, true);
+    proj = -1; showProj(p, true);
     applyFilter();
     if (skSel) showSkill(skSel, false);
     labels(); placeInd();
+    requestAnimationFrame(() => requestAnimationFrame(() => document.documentElement.classList.remove('swapping')));
   }
   let start = new URLSearchParams(location.search).get('lang');
   if (!LANGS.includes(start)) { try { start = localStorage.getItem('lang'); } catch {} }
@@ -1388,16 +1407,22 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
 
   /* ---- menú móvil ---- */
   const sheet = $('sheet'), mb = $('menuBtn');
+  let closing = 0;
   function menu(open) {
-    if (sheet.hidden === !open) return;
-    sheet.hidden = !open;
     mb.setAttribute('aria-expanded', String(open));
     $('stage').inert = open;
-    if (open) (sheet.querySelector('.sn[aria-current=true]') || sheet.querySelector('.sn')).focus();
+    clearTimeout(closing);
+    if (open) {
+      sheet.classList.remove('out'); sheet.hidden = false;
+      (sheet.querySelector('.sn[aria-current=true]') || sheet.querySelector('.sn')).focus({preventScroll: true});
+    } else if (!sheet.hidden) {
+      sheet.classList.add('out');
+      closing = setTimeout(() => { sheet.hidden = true; sheet.classList.remove('out'); }, 320);
+    }
   }
-  mb.addEventListener('click', () => menu(sheet.hidden));
+  mb.addEventListener('click', () => menu(mb.getAttribute('aria-expanded') !== 'true'));
   sheet.addEventListener('click', e => { if (e.target.closest('.sn, .btn')) menu(false); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !sheet.hidden) { menu(false); mb.focus(); } });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && mb.getAttribute('aria-expanded') === 'true') { menu(false); mb.focus(); } });
   matchMedia('(min-width:821px)').addEventListener('change', e => { if (e.matches) menu(false); });
 
   window.addEventListener('hashchange', () => { const k = ids.indexOf(location.hash.slice(1)); if (k >= 0) go(k); });
