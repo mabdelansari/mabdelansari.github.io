@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mostafa Abdel-Illah El Ansari</title>
+<meta name="description" content="Backend Developer .NET en Barcelona. APIs REST y microservicios con C#, ASP.NET Core y Microsoft Azure.">
+<meta name="theme-color" content="#F5F6F8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wdth,wght@75..100,400..700&display=swap" rel="stylesheet">
+<style>
+/* IDEA    una aplicación de una sola pantalla: cabecera con pestañas, escenario que se desliza en horizontal y pie con el progreso.
+           Cada sección cabe en el viewport; dentro, lo que se toca crece (filas de habilidades, tarjetas de proyecto).
+   COLOR   gris frío #F5F6F8, tinta #0F1222, violeta .NET #512BD4 como único acento. Oscuro: #0C0E14 con violeta #A08BFF.
+   TYPE    una sola familia, Instrument Sans. Titulares estrechos (eje wdth) y apretados; texto a ancho normal.
+   MOTION  una única entrada al cargar en Inicio; después, solo responde a la persona. */
+:root{color-scheme:light dark;
+  --bg:light-dark(#F5F6F8,#0C0E14);--surface:light-dark(#FFFFFF,#141722);--ink:light-dark(#0F1222,#ECEEF4);
+  --muted:light-dark(#5A6074,#9CA1B4);--line:light-dark(#E2E5EB,#232736);
+  --accent:light-dark(#512BD4,#A08BFF);--accent-soft:light-dark(rgba(81,43,212,.08),rgba(160,139,255,.13));
+  --on-accent:light-dark(#FFFFFF,#0C0E14);--ok:light-dark(#15803D,#4ADE80);
+  --font:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;--ease:cubic-bezier(.65,0,.25,1);
+  --gut:clamp(20px,4vw,64px);
+  /* cristal: superficie translúcida + desenfoque + filo de luz arriba */
+  --glass:light-dark(rgba(255,255,255,.55),rgba(24,27,40,.5));--glass-hi:light-dark(rgba(255,255,255,.75),rgba(34,38,56,.66));
+  --glass-line:light-dark(rgba(255,255,255,.85),rgba(255,255,255,.09));--glass-edge:light-dark(rgba(15,18,34,.08),rgba(255,255,255,.06));
+  --blur:blur(18px) saturate(160%);
+  --glass-shadow:0 1px 0 var(--glass-line) inset,0 0 0 1px var(--glass-edge),0 10px 30px -12px light-dark(rgba(30,20,90,.18),rgba(0,0,0,.6))}
+:root[data-theme=light]{color-scheme:light}
+:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html,body{height:100%;overflow:hidden}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--font);-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:inherit}
+button{font:inherit;color:inherit}
+h1,h2,h3,p{margin:0}
+h1,h2,h3{text-wrap:balance}
+h1,h2{font-weight:600;font-stretch:80%;letter-spacing:-.03em;line-height:.98}
+::selection{background:var(--accent);color:var(--on-accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
+/* ---------- armazón ---------- */
+.app{position:relative;isolation:isolate;overflow:clip;display:grid;grid-template-rows:auto minmax(0,1fr) auto;height:100vh;height:100dvh}
+/* luz de fondo que el cristal refracta: tres manchas suaves que se desplazan con la sección activa */
+.app::before{content:"";position:absolute;inset:-20%;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(38% 42% at 18% 22%,light-dark(rgba(81,43,212,.20),rgba(124,98,255,.26)),transparent 70%),
+    radial-gradient(34% 40% at 82% 30%,light-dark(rgba(56,132,255,.16),rgba(56,132,255,.16)),transparent 70%),
+    radial-gradient(40% 44% at 60% 88%,light-dark(rgba(196,92,255,.14),rgba(196,92,255,.14)),transparent 70%);
+  filter:blur(20px);transform:translateX(calc(var(--cur,0) * -3%));transition:transform 1.2s var(--ease)}
+.top{position:relative;z-index:2;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;padding:14px var(--gut);
+  background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border-bottom:1px solid var(--glass-edge);box-shadow:0 1px 0 var(--glass-line) inset}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;justify-self:start;border-radius:10px}
+.brand .mk{display:grid;place-items:center;width:40px;height:40px;border-radius:11px;background:var(--ink);color:var(--bg);font-weight:700;font-stretch:85%;font-size:15px;letter-spacing:-.02em}
+.brand strong{display:block;font-weight:600;font-size:15px;line-height:1.2}
+.brand small{display:block;color:var(--muted);font-size:13px;line-height:1.2}
+.tabs{position:relative;display:flex;gap:2px;padding:4px;border-radius:999px;background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--glass-shadow)}
+.tab{position:relative;z-index:1;flex:none;display:inline-flex;align-items:center;min-height:36px;padding:0 16px;border-radius:999px;text-decoration:none;font-size:14.5px;font-weight:500;color:var(--muted);white-space:nowrap;transition:color .25s}
+.tab:hover{color:var(--ink)}
+.tab[aria-current=true]{color:var(--on-accent)}
+.ind{position:absolute;z-index:0;top:4px;left:0;height:36px;border-radius:999px;background:var(--accent);box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 6px 18px -6px var(--accent);transition:transform .5s var(--ease),width .5s var(--ease)}
+.actions{display:flex;align-items:center;gap:10px;justify-self:end}
+.icon{display:grid;place-items:center;width:44px;height:44px;border-radius:12px;border:1px solid transparent;background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--glass-shadow);cursor:pointer;transition:border-color .2s,background .2s}
+.icon:hover{border-color:var(--muted);background:var(--glass-hi)}
+.icon:disabled{opacity:.35;cursor:default}
+.icon:disabled:hover{border-color:transparent;background:var(--glass)}
+.icon svg{width:18px;height:18px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 22px;border-radius:12px;font-weight:600;text-decoration:none;
+  border:1px solid transparent;background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--glass-shadow);transition:border-color .2s,background .2s,transform .2s}
+.btn:hover{border-color:var(--muted);background:var(--glass-hi)}
+.btn.main{background:var(--accent);border-color:var(--accent);color:var(--on-accent);box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 10px 24px -10px var(--accent)}
+.btn.main:hover{background:color-mix(in srgb,var(--accent) 86%,var(--ink))}
+.btn.sm{min-height:44px;padding:0 18px;font-size:14.5px}
+
+/* ---------- escenario ---------- */
+.stage{overflow:clip;position:relative}
+.track{display:flex;height:100%;transform:translateX(calc(var(--cur,0) * -100%));transition:transform .75s var(--ease)}
+.slide{flex:0 0 100%;height:100%;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+.wrap{max-width:1320px;min-height:100%;margin:0 auto;padding:clamp(24px,5vh,56px) var(--gut);display:flex;flex-direction:column;justify-content:center}
+.sh{display:flex;justify-content:space-between;align-items:end;gap:12px 48px;flex-wrap:wrap;margin-bottom:clamp(20px,4vh,44px)}
+.sh h2{font-size:clamp(38px,min(4.2vw,7.4vh),68px)}
+.sh p{color:var(--muted);max-width:48ch}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tags span{font-size:13px;font-weight:500;padding:4px 10px;border-radius:8px;background:var(--accent-soft);color:var(--ink)}
+
+/* ---------- inicio ---------- */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:minmax(0,1fr) auto;gap:clamp(24px,4.5vh,48px) clamp(32px,6vw,112px);justify-content:stretch}
+.intro{align-self:center}
+.avail{display:inline-flex;align-items:center;gap:10px;padding:7px 14px 7px 12px;border-radius:999px;background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--glass-shadow);font-size:14px;font-weight:500}
+.avail i{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 4px color-mix(in srgb,var(--ok) 20%,transparent)}
+.hero h1{font-size:clamp(40px,min(5.8vw,9.2vh),108px);margin-top:clamp(16px,3vh,28px);max-width:17ch}
+.role{font-size:clamp(19px,min(1.7vw,3vh),24px);font-weight:600;color:var(--accent);margin-top:clamp(14px,2.4vh,22px)}
+.lead{font-size:clamp(16px,min(1.25vw,2.2vh),18.5px);color:var(--muted);max-width:54ch;margin-top:10px}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:clamp(20px,3.6vh,34px)}
+.photo{position:relative;margin:0;align-self:center;width:clamp(220px,min(25vw,46vh),380px);aspect-ratio:1;border-radius:24px;overflow:hidden;background:var(--surface);box-shadow:0 0 0 1px var(--glass-edge),0 30px 60px -24px light-dark(rgba(60,30,160,.35),rgba(0,0,0,.7))}
+.photo img{width:100%;height:100%;object-fit:cover}
+.photo figcaption{position:absolute;left:12px;right:12px;bottom:12px;padding:12px 14px;border-radius:14px;
+  background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--glass-shadow)}
+.photo figcaption{display:flex;align-items:center;gap:12px}
+.photo figcaption div strong{display:block;font-size:15px;line-height:1.25}
+.photo figcaption div span{display:block;font-size:13px;color:var(--muted)}
+
+.career{grid-column:1 / -1;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.career li{position:relative}
+.step{position:relative;display:block;width:100%;text-align:left;border:0;background:none;padding:22px 16px 4px 0;cursor:pointer;border-radius:8px}
+.step::before{content:"";position:absolute;top:-5px;left:0;width:9px;height:9px;border-radius:50%;background:var(--bg);border:2px solid var(--muted);transition:background .2s,border-color .2s,transform .3s var(--ease)}
+.step b{display:block;font-size:13px;font-weight:500;color:var(--muted);font-variant-numeric:tabular-nums}
+.step strong{display:block;font-size:15.5px;font-weight:600;line-height:1.3;margin-top:4px;transition:color .2s}
+.step span{display:block;font-size:13.5px;color:var(--muted);margin-top:2px}
+.step:hover strong{color:var(--accent)}
+.step:hover::before{border-color:var(--accent);transform:scale(1.3)}
+.now .step::before{background:var(--accent);border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+
+/* entrada única al cargar */
+.in{animation:rise .9s var(--ease) both;animation-delay:var(--d,0s)}
+.photo.in{animation-name:unveil}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}}
+@keyframes unveil{from{clip-path:inset(100% 0 0 0 round 24px)}to{clip-path:inset(0 0 0 0 round 24px)}}
+
+/* ---------- sobre mí ---------- */
+.about{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(32px,5vw,96px);align-items:start}
+.about .big{font-size:clamp(21px,min(1.9vw,3.3vh),28px);line-height:1.35;font-weight:500;letter-spacing:-.01em}
+.about .txt p+p{margin-top:14px}
+.about .txt p:not(.big){color:var(--muted)}
+.about .txt .big+p{margin-top:22px}
+dl{margin:0 0 clamp(20px,4vh,36px);display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--glass-edge);border-radius:16px;overflow:hidden;background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--glass-shadow)}
+dl div{background:var(--glass);padding:clamp(12px,2vh,18px) 18px}
+dt{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--muted)}
+dt .ui{width:15px;height:15px;color:var(--accent)}
+dd{margin:2px 0 0;font-weight:600;line-height:1.3}
+.edu{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px}
+.edu h3{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600;margin-bottom:6px}
+.edu h3 .ui{color:var(--accent)}
+.list{list-style:none;margin:0;padding:0}
+.list li{padding:10px 0;border-top:1px solid var(--line)}
+.list strong{display:block;font-weight:600;font-size:15px;line-height:1.35}
+.list span{display:block;color:var(--muted);font-size:13.5px}
+/* cada fila: logo del centro o certificador, título y entidad; si hay credencial, flecha */
+.list .row{display:grid;grid-template-columns:36px minmax(0,1fr) auto;column-gap:12px;align-items:center;color:inherit;text-decoration:none;border-radius:6px}
+.list .row > strong,.list .row > span:not(.org){grid-column:2}
+.list .org{grid-column:1;grid-row:1 / span 2;display:grid;place-items:center;width:36px;height:36px;padding:5px;border-radius:9px;background:#fff;box-shadow:0 0 0 1px var(--glass-edge);object-fit:contain}
+.list .org.fill{padding:0;object-fit:cover}
+.list .org svg,.list .org .bm{width:100%;height:100%}
+.list .go{grid-column:3;grid-row:1 / span 2;width:16px;height:16px;color:var(--muted);transition:color .2s,transform .35s var(--ease)}
+.list a:is(:hover,:focus-visible) strong,.list a:is(:hover,:focus-visible) .go{color:var(--accent)}
+.list a:is(:hover,:focus-visible) .go{transform:translate(2px,-2px)}
+
+/* ---------- experiencia ---------- */
+/* Experiencia se alinea arriba: al cambiar de empleo la cabecera no salta aunque haya menos contenido */
+#experiencia .wrap{justify-content:flex-start}
+.xsh{align-items:center}
+.jobs{list-style:none;margin:0;padding:4px;display:flex;gap:4px;border-radius:18px;background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--glass-shadow)}
+.job{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;column-gap:12px;text-align:left;border:0;background:none;padding:8px 18px 8px 8px;border-radius:14px;cursor:pointer;transition:background .25s,color .25s}
+.job b{display:block;font-size:12.5px;font-weight:500;color:var(--muted);font-variant-numeric:tabular-nums}
+.job strong{display:block;font-size:16px;font-weight:600;line-height:1.25;transition:color .2s}
+.job:hover strong{color:var(--accent)}
+.job[aria-pressed=true]{background:var(--glass-hi);box-shadow:0 0 0 1px var(--accent),0 8px 20px -12px var(--accent)}
+.job[aria-pressed=true] strong{color:var(--accent)}
+.detail .who{display:flex;align-items:center;gap:16px}
+.detail .xh{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,480px);align-items:center;gap:14px 32px}
+.detail h3{font-size:clamp(26px,min(2.5vw,4.4vh),38px);font-weight:600;font-stretch:82%;letter-spacing:-.025em;line-height:1.05}
+.detail .co{color:var(--muted);margin-top:4px}
+.detail .ttl{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px}
+.detail .dur{flex:none;padding:2px 10px;font-variant-numeric:tabular-nums;border-radius:999px;border:1px solid var(--line);color:var(--ink);font-weight:600;font-size:13px}
+.detail .tags{justify-content:flex-end}
+.groups{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(12px,2vh,18px);margin-top:clamp(16px,3vh,28px)}
+.groups[data-n="3"]{grid-template-columns:repeat(3,minmax(0,1fr))}
+.grp{padding:clamp(14px,2.2vh,20px) clamp(16px,1.6vw,22px);border-radius:18px;background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--glass-shadow)}
+.grp h4{display:flex;align-items:center;gap:10px;margin:0 0 10px;font-size:15.5px;font-weight:600}
+.grp h4 .ui{width:30px;height:30px;padding:6px;border-radius:9px;background:var(--accent-soft);color:var(--accent)}
+.grp ul{margin:0;padding-left:18px;font-size:14.5px;line-height:1.5}
+.grp li+li{margin-top:6px}
+.grp li::marker{color:var(--accent)}
+.detail.swap{animation:rise .5s var(--ease) both}
+
+/* ---------- habilidades: filas que se abren ---------- */
+.skg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(12px,2vh,18px)}
+.sg{padding:clamp(14px,2.2vh,20px) clamp(16px,1.6vw,20px);border-radius:18px;border:1px solid transparent;background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--glass-shadow);transition:border-color .3s,opacity .3s}
+.sg header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.sg header .ui{width:30px;height:30px;padding:6px;border-radius:9px;background:var(--accent-soft);color:var(--accent)}
+.sg h3{font-size:16px;font-weight:600;line-height:1.2}
+.cnt{margin-left:auto;font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.pills{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.pills li{font-size:13.5px;font-weight:500;line-height:20px;padding:4px 10px;border-radius:999px;background:var(--accent-soft)}
+@media (hover:hover){
+  .skg:hover .sg:not(:hover){opacity:.55}
+  .sg:hover{border-color:var(--accent)}
+}
+.also{margin-top:clamp(14px,2.6vh,28px);color:var(--muted);max-width:92ch;font-size:15px}
+.also strong{color:var(--ink);font-weight:600}
+
+/* ---------- proyectos: tres tarjetas iguales; la vista previa mantiene la proporción de la captura ---------- */
+.badge{font-size:12.5px;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--accent);color:var(--on-accent);white-space:nowrap}
+.pinfo p{margin-top:12px;color:var(--muted);max-width:44ch;font-size:16px}
+.pinfo .tags{margin-top:18px}
+.pinfo .acts{margin-top:clamp(18px,3vh,28px)}
+.pinfo .btn svg{width:16px;height:16px;transition:transform .35s var(--ease)}
+.pinfo .btn:is(:hover,:focus-visible) svg{transform:translate(2px,-2px)}
+.shot{position:relative;flex:none;border-radius:14px;overflow:hidden;background:light-dark(#E9EBF1,#0F1220);box-shadow:0 0 0 1px var(--glass-edge)}
+.shot .bar{display:flex;align-items:center;gap:5px;height:20px;padding:0 10px;background:var(--glass-hi);border-bottom:1px solid var(--glass-edge)}
+.shot .bar i{width:7px;height:7px;border-radius:50%;background:light-dark(#C9CCD8,#3A3F57)}
+/* las capturas son 16:10 (577×361): el hueco tiene esa misma proporción, así que se ven enteras y sin recortes ni zoom */
+.shot img,.ill{display:block;width:100%;aspect-ratio:16/10;max-height:var(--shot-max,none);object-fit:cover;object-position:top center}
+.ill{display:grid;grid-auto-rows:1fr;padding:0 16px;overflow:hidden}
+.ill p{display:flex;align-items:center;gap:12px;margin:0;font-weight:600;font-stretch:85%;font-size:clamp(14px,1.9vh,18px);letter-spacing:-.01em;color:var(--muted);white-space:nowrap}
+.ill p+p{border-top:1px solid var(--line)}
+.ill p:first-child{color:var(--ink)}
+.ill b{flex:none;min-width:44px;font-size:11px;font-weight:600;font-stretch:100%;text-align:center;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.ill p:first-child b{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+/* detalle del proyecto: vista previa grande a la izquierda, datos y acción a la derecha */
+.shp{margin-top:8px}
+
+/* ---------- contacto ---------- */
+.ct{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(32px,6vw,112px);align-items:center}
+.ct h2{font-size:clamp(56px,min(8.4vw,15vh),148px);letter-spacing:-.045em;line-height:.92}
+.ct .txt p{color:var(--muted);margin-top:22px;max-width:42ch;font-size:clamp(16px,1.25vw,18.5px)}
+.links{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.links a{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:4px 20px;min-height:clamp(70px,11vh,96px);padding:10px 4px;border-bottom:1px solid var(--line);text-decoration:none;
+  border-radius:0;transition:padding .35s var(--ease)}
+.links strong{font-size:clamp(22px,2vw,28px);font-weight:600;letter-spacing:-.015em;transition:color .2s}
+.links .ci{grid-row:1 / span 2;display:grid;place-items:center;width:46px;height:46px;border-radius:14px;background:var(--glass);box-shadow:var(--glass-shadow);transition:color .2s}
+.links .ci .ui,.links .ci .bm{width:20px;height:20px}
+.links a:is(:hover,:focus-visible) .ci{color:var(--accent)}
+.links strong{grid-column:2}
+.links small{grid-column:2;font-size:14px;color:var(--muted);overflow-wrap:anywhere}
+.links .go{grid-column:3;grid-row:1 / span 2;display:grid;place-items:center;width:44px;height:44px;border-radius:50%;border:1px solid transparent;background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--glass-shadow);transition:background .25s,border-color .25s,color .25s,transform .35s var(--ease)}
+.links .go svg{width:16px;height:16px}
+.links a.dl:is(:hover,:focus-visible) .go{transform:translateY(2px)}
+.links a:is(:hover,:focus-visible){padding-left:14px}
+.links a:is(:hover,:focus-visible) strong{color:var(--accent)}
+.links a:is(:hover,:focus-visible) .go{background:var(--accent);border-color:var(--accent);color:var(--on-accent);transform:rotate(45deg)}
+.foot{color:var(--muted);font-size:13px;margin-top:clamp(24px,5vh,48px)}
+
+/* ---------- pie: progreso ---------- */
+.bot{position:relative;z-index:2;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;padding:10px var(--gut);background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border-top:1px solid var(--glass-edge);box-shadow:0 1px 0 var(--glass-line) inset}
+.where{font-size:14px;color:var(--muted)}
+.where strong{color:var(--ink);font-weight:600;margin-right:8px;white-space:nowrap}
+.pager{display:flex;align-items:center;gap:12px}
+.segs{display:flex;gap:4px;list-style:none;margin:0;padding:0}
+.seg{display:grid;align-items:center;width:34px;height:44px;border:0;background:none;padding:0;cursor:pointer}
+.seg::before{content:"";height:4px;border-radius:4px;background:var(--line);transition:background .3s}
+.seg:hover::before{background:var(--muted)}
+.seg[aria-current=true]::before{background:var(--accent)}
+.hint{justify-self:end;font-size:13.5px;color:var(--muted)}
+.hint kbd{font:600 12px var(--font);color:var(--ink);border:1px solid var(--glass-edge);background:var(--glass-hi);border-radius:6px;padding:1px 7px}
+
+
+/* ---------- iconos y logos ---------- */
+.ui{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ti{display:inline-block;width:16px;height:16px;flex:none;object-fit:contain}
+.ti.si,.bm{background:currentColor;-webkit-mask:var(--m) center/contain no-repeat;mask:var(--m) center/contain no-repeat}
+.bm{display:inline-block;width:18px;height:18px;flex:none}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) img.ti.mono{filter:invert(1)}}
+:root[data-theme=dark] img.ti.mono{filter:invert(1)}
+.tags span,.pills li{display:inline-flex;align-items:center;gap:7px}
+.logo{display:grid;place-items:center;flex:none;width:44px;height:44px;border-radius:12px;overflow:hidden;background:#161A2E;color:#fff;
+  font-size:18px;font-weight:700;font-stretch:85%;box-shadow:0 0 0 1px var(--glass-edge)}
+.logo img{width:100%;height:100%;object-fit:cover}
+.logo img[src$="raona.png"]{transform:scale(1.12)}
+.logo.txt{background:linear-gradient(135deg,light-dark(#E4E6EE,#2A2F45),light-dark(#CFD3DF,#1C2033));color:var(--ink)}
+.logo.lg{width:58px;height:58px;border-radius:16px;font-size:24px}
+.logo.sm{width:38px;height:38px;border-radius:10px}
+
+/* ---------- jerarquía de superficies ----------
+   Una sola caja por cada cosa que es una unidad: los datos personales, el detalle de un empleo, el conjunto de habilidades
+   y cada proyecto. Dentro de una caja, las partes se separan con filetes, nunca con más cajas.
+   Textos largos, listas, trayectoria y contacto van abiertos sobre el fondo. */
+:root{--pane:light-dark(rgba(255,255,255,.62),rgba(255,255,255,.035))}
+
+/* controles: sin cristal propio dentro de la cabecera y el pie */
+.tabs{background:none;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+.icon{background:none;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;border-color:transparent}
+.icon:hover{background:var(--accent-soft);border-color:transparent}
+.icon:disabled:hover{background:none}
+.avail{background:none;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;padding:0}
+.btn{background:var(--pane);box-shadow:none;border-color:var(--line)}
+.btn:hover{background:var(--accent-soft);border-color:var(--accent)}
+
+/* etiquetas y tecnologías: chips de filete, sin relleno */
+.tags{gap:6px}
+.tags span{background:none;border:1px solid var(--line);padding:3px 10px;border-radius:999px;font-size:12.5px}
+.pills{gap:6px}
+.pills li{background:none;border:1px solid var(--line);padding:0;font-size:13px}
+.pills .pb{all:unset;display:inline-flex;align-items:center;gap:7px;padding:3px 10px;border-radius:999px;cursor:pointer}
+.pills .pb:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.pills li:has(.pb:hover){border-color:var(--accent)}
+.pills li.sel,.skg[data-f] .pills li.sel{opacity:1;background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+/* pie de Habilidades: «también he trabajado con» o la ficha de la tecnología elegida */
+.skfoot{margin-top:clamp(14px,2.6vh,28px);min-height:44px;display:grid;align-items:center}
+.skfoot .also{margin:0}
+.hint-sk{color:var(--muted);margin-left:6px}
+.skinfo{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 24px;animation:rise .4s var(--ease) both}
+.skinfo p{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin:0;font-size:15px;color:var(--muted)}
+.skinfo strong{display:inline-flex;align-items:center;gap:8px;font-size:17px;font-weight:600;color:var(--ink)}
+.skinfo strong .ti{width:18px;height:18px}
+.skinfo .acts{display:flex;flex-wrap:wrap;gap:6px}
+.lk,.skinfo .x{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:none;color:var(--ink);font:500 13.5px var(--font);cursor:pointer;transition:border-color .2s,color .2s,background .2s}
+.lk svg{width:14px;height:14px;color:var(--accent)}
+.lk:hover{border-color:var(--accent);color:var(--accent)}
+.skinfo .x{width:36px;padding:0;justify-content:center;color:var(--muted)}
+.skinfo .x:hover{color:var(--ink);border-color:var(--muted)}
+
+/* sobre mí: una caja con cuatro celdas */
+dl{gap:0;overflow:hidden}
+dl div{background:none;padding:clamp(12px,2vh,16px) 18px}
+/* tres datos en fila y los idiomas debajo, a todo el ancho */
+dl{grid-template-columns:repeat(3,minmax(0,1fr))}
+dl div:nth-child(2),dl div:nth-child(3){border-left:1px solid var(--line)}
+dl .lg{grid-column:1 / -1;border-top:1px solid var(--line)}
+.langs{list-style:none;margin:8px 0 0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px 16px;font-weight:400}
+.langs li{display:grid;gap:5px;align-content:start}
+.langs strong{font-size:14.5px;font-weight:600;line-height:1.2}
+.langs small{font-size:12.5px;color:var(--muted);font-weight:500;line-height:1.2}
+/* nivel: básico, independiente (B2) o nativo */
+.lv{display:grid;grid-template-columns:repeat(3,1fr);gap:3px}
+.lv i{height:4px;border-radius:4px;background:var(--line)}
+.lv[data-n="3"] i,.lv[data-n^="2"] i:nth-child(-n+2),.lv[data-n="1"] i:first-child{background:var(--accent)}
+.lv[data-n="2.5"] i:nth-child(3){background:linear-gradient(90deg,var(--accent) 50%,var(--line) 50%)}
+
+/* experiencia: pestañas abiertas; el detalle es una caja con cabecera y bloques separados por filetes */
+.jobs{background:none;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;padding:0;gap:28px}
+.job{padding:6px 0 10px;border-radius:0}
+.job[aria-pressed=true]{background:none;box-shadow:inset 0 -2px 0 var(--accent)}
+.job:not([aria-pressed=true]) .logo{opacity:.6;filter:grayscale(1);transition:opacity .25s,filter .25s}
+.job:hover .logo{opacity:1;filter:none}
+.detail{overflow:hidden}
+.detail .xh{padding:clamp(16px,2.6vh,24px) clamp(18px,2vw,28px);border-bottom:1px solid var(--line)}
+.groups{gap:0;margin-top:0}
+.grp{background:none;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;border-radius:0;padding:clamp(14px,2.4vh,22px) clamp(18px,2vw,28px)}
+.grp:nth-child(even){border-left:1px solid var(--line)}
+.grp:nth-child(n+3){border-top:1px solid var(--line)}
+.groups[data-n="3"] .grp{border-top:0}
+.groups[data-n="3"] .grp:not(:first-child){border-left:1px solid var(--line)}
+.grp h4 .ui,.sg header .ui{width:28px;height:28px;padding:5px;border-radius:8px}
+
+/* habilidades: una caja con seis celdas */
+.skg{gap:0;overflow:hidden}
+.sg{background:none;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;border:0;border-radius:0;padding:clamp(14px,2.4vh,22px) clamp(16px,1.8vw,24px);transition:background .3s,opacity .3s}
+.sg:not(:nth-child(3n+1)){border-left:1px solid var(--line)}
+.sg:nth-child(n+4){border-top:1px solid var(--line)}
+@media (hover:hover){
+  .groups:hover .grp::before,.skg:hover .sg::before{opacity:1}
+}
+
+/* habilidades: filtro «dónde lo he usado» */
+.flt{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.flt-l{font-size:13px;color:var(--muted);margin-right:6px}
+.fb{min-height:40px;padding:0 16px;border-radius:999px;border:1px solid var(--line);background:none;color:var(--muted);font:500 14px var(--font);cursor:pointer;transition:color .2s,border-color .2s,background .2s}
+.fb:hover{color:var(--ink);border-color:var(--muted)}
+.fb[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.pills li{transition:opacity .25s,border-color .25s,background .25s,color .25s}
+.skg[data-f] .pills li:not(.on){opacity:.3}
+.skg[data-f] .pills li.on{border-color:var(--accent);background:var(--accent-soft)}
+.sg h3,.sg header .ui{transition:opacity .25s}
+.skg[data-f] .sg.none h3,.skg[data-f] .sg.none header .ui{opacity:.4}
+
+
+/* contacto: filas abiertas; el icono, en un recuadro de filete */
+.links .ci{background:var(--pane);box-shadow:none;border:1px solid var(--line);width:42px;height:42px;border-radius:12px;color:var(--muted)}
+.links .go{background:none;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;border:1px solid var(--line)}
+
+/* ---------- sin cajas: solo Proyectos va en una caja ----------
+   El resto se apoya en el fondo: cifras en tipografía grande, filetes finos y una luz violeta que sigue al cursor
+   por las celdas de Experiencia y Habilidades (la misma luz del fondo, ahora respondiendo al visitante). */
+dl{background:none;backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:none;border-radius:0;overflow:visible;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+dl{grid-template-columns:auto minmax(0,1fr) auto}
+dl div{padding:clamp(12px,2vh,18px) 20px}
+dl div:first-child,dl .lg{padding-left:0}
+dl div:not(.lg) dd{margin-top:4px;white-space:nowrap;font-size:clamp(20px,min(1.7vw,3.2vh),26px);font-weight:600;font-stretch:80%;letter-spacing:-.02em;line-height:1.05}
+.detail{--gx:clamp(18px,2vw,28px)}
+.detail .xh{padding:0 0 clamp(16px,2.6vh,24px)}
+.groups{margin-inline:calc(var(--gx) * -1)}
+.grp{padding-inline:var(--gx)}
+.skg{--gx:clamp(16px,1.8vw,24px);margin-inline:calc(var(--gx) * -1)}
+.sg{padding-inline:var(--gx)}
+.sg h3{font-size:clamp(17px,1.45vw,20px);font-stretch:85%;letter-spacing:-.01em}
+.grp,.sg{position:relative;isolation:isolate}
+.grp::before,.sg::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:0;transition:opacity .35s;
+  background:radial-gradient(280px circle at var(--x,50%) var(--y,50%),color-mix(in srgb,var(--accent) 13%,transparent),transparent 72%)}
+
+/* ---------- experiencia: línea de tiempo ----------
+   A la izquierda, el recorrido de arriba (hoy) abajo (2019): los empleos se eligen y la formación cierra el camino.
+   A la derecha, el detalle del empleo elegido. */
+.xpw{display:grid;grid-template-columns:clamp(250px,22vw,320px) minmax(0,1fr);gap:clamp(28px,4vw,72px);align-items:start}
+.xpl h2{font-size:clamp(38px,min(3.6vw,6.6vh),58px);margin-bottom:clamp(16px,3vh,32px)}
+.tl{list-style:none;margin:0;padding:0;position:relative}
+.tl::before{content:"";position:absolute;left:9px;top:14px;bottom:14px;width:2px;border-radius:2px;background:linear-gradient(var(--accent),color-mix(in srgb,var(--accent) 35%,var(--line)) 45%,var(--line))}
+.tj{position:relative;display:grid;grid-template-columns:20px minmax(0,1fr);column-gap:18px;width:100%;padding:12px 0;border:0;background:none;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.tj > :not(.dot){grid-column:2}
+.tj .dot{grid-row:1 / span 3;margin-top:2px;width:20px;height:20px;border-radius:50%;background:var(--bg);border:2px solid var(--muted);transition:background .3s,border-color .3s,box-shadow .3s}
+.tj b{font-size:12.5px;font-weight:500;color:var(--muted);font-variant-numeric:tabular-nums}
+.tj strong{font-size:clamp(17px,1.4vw,20px);font-weight:600;font-stretch:85%;letter-spacing:-.01em;line-height:1.2;margin-top:2px;transition:color .2s}
+.tj .co{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin-top:6px;font-size:14px;color:var(--muted)}
+.tj .co .logo{width:24px;height:24px;border-radius:7px}
+.tj .co i{font-style:normal;font-size:12px;font-weight:600;color:var(--ink);padding:1px 8px;border-radius:999px;border:1px solid var(--line);font-variant-numeric:tabular-nums}
+.tj:hover strong{color:var(--accent)}
+.tj:hover .dot{border-color:var(--accent)}
+.tj[aria-pressed=true] .dot{background:var(--accent);border-color:var(--accent);box-shadow:0 0 0 5px var(--accent-soft)}
+.tj[aria-pressed=true] strong{color:var(--accent)}
+.tj.ms{padding-block:8px}
+.tj.ms .dot{width:12px;height:12px;margin:4px 0 0 4px;border-width:2px;border-color:var(--line)}
+.tj.ms strong{font-size:15px;font-stretch:100%;color:var(--muted)}
+.tj.ms .co{margin-top:2px;font-size:13px}
+.tj.ms:hover strong{color:var(--ink)}
+.tl li:first-child .tj[aria-pressed]::after{content:"Ahora";position:absolute;right:0;top:12px;font-size:11.5px;font-weight:600;color:var(--ok)}
+.xpw .detail .xh{grid-template-columns:minmax(0,1fr)}
+.xpw .detail .tags{justify-content:flex-start}
+.xpw .detail .xh{gap:10px;padding-bottom:14px}
+.xpw .grp{padding-block:clamp(10px,1.8vh,16px)}
+.xpw .grp h4{margin-bottom:6px}
+.xpw .grp ul{font-size:14px;line-height:1.45}
+.xpw .grp li+li{margin-top:4px}
+
+/* ---------- habilidades: mapa alrededor del stack principal ----------
+   Una columna vertebral violeta en el centro con el stack principal en un orbe; cada grupo se une a ella con un trazo. */
+#skills{--hw:clamp(200px,18vw,250px);--g:clamp(28px,3.4vw,56px);position:relative;display:grid;grid-template-columns:minmax(0,1fr) var(--hw) minmax(0,1fr);gap:0 var(--g);align-items:center;margin-inline:0}
+#skills::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:linear-gradient(transparent,var(--accent) 22% 78%,transparent);opacity:.45}
+.skcol{display:grid;gap:clamp(14px,2.6vh,26px)}
+#skills .sg{padding:0;border:0;background:none;overflow:visible}
+#skills .sg::before{display:none}
+#skills .sg::after{content:"";position:absolute;top:14px;width:calc(var(--g) + var(--hw) / 2);height:1px;background:var(--line);transition:background .3s}
+.skcol.l .sg::after{left:100%;background:linear-gradient(to right,var(--line),color-mix(in srgb,var(--accent) 45%,var(--line)))}
+.skcol.r .sg::after{right:100%;background:linear-gradient(to left,var(--line),color-mix(in srgb,var(--accent) 45%,var(--line)))}
+.skcol.l .sg header{justify-content:flex-end;text-align:right}
+.skcol.l .sg .pills{justify-content:flex-end}
+.skcol.l .sg header .ui{order:2}
+#skills .sg:hover::after{background:var(--accent)}
+.hub{position:relative;z-index:1;display:grid;place-items:center}
+.orb{width:var(--hw);aspect-ratio:1;border-radius:50%;display:grid;place-content:center;justify-items:center;gap:6px;text-align:center;color:#fff;
+  background:radial-gradient(circle at 32% 26%,color-mix(in srgb,var(--accent) 62%,#fff),var(--accent) 62%,color-mix(in srgb,var(--accent) 80%,#000));
+  box-shadow:0 0 0 12px var(--accent-soft),0 0 0 26px color-mix(in srgb,var(--accent) 5%,transparent),0 24px 60px -18px var(--accent)}
+.orb .k{font-size:12px;font-weight:500;opacity:.85}
+.orb strong{font-size:clamp(26px,2.4vw,34px);font-weight:600;font-stretch:80%;letter-spacing:-.02em;line-height:1}
+.core{list-style:none;margin:8px 0 0;padding:0;display:flex;gap:6px}
+.core .pb{all:unset;display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:#fff;cursor:pointer;box-shadow:0 4px 12px -4px rgba(0,0,0,.35);transition:transform .2s}
+.core .pb:hover{transform:translateY(-2px)}
+.core .pb:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.core .pb[aria-pressed=true]{box-shadow:0 0 0 3px #fff,0 0 0 5px color-mix(in srgb,var(--accent) 50%,#000)}
+.core .ti{width:20px;height:20px}
+
+/* ---------- sobre mí: texto y cifras a la izquierda; a la derecha, los idiomas como anillos y las credenciales en un camino ---------- */
+.facts{margin:clamp(18px,3.4vh,32px) 0 0}
+.facts div:not(.lg) dd{font-size:clamp(24px,min(2.2vw,4vh),34px)}
+.me{display:grid;gap:clamp(18px,3.4vh,34px)}
+.langviz{display:grid;grid-template-columns:auto minmax(0,1fr);gap:clamp(20px,3vw,40px);align-items:center}
+.rings{width:clamp(170px,min(16vw,28vh),236px);height:auto;transform:rotate(-90deg);overflow:visible}
+.rings circle{fill:none;stroke-width:12}
+.rings .trk{stroke:var(--line);opacity:.7}
+.ring{stroke:var(--c);stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:100;transition:stroke-dashoffset 1.3s var(--ease) var(--d),opacity .3s}
+.slide.on .ring{stroke-dashoffset:calc(100 - var(--p))}
+.rings text{transform:rotate(90deg);transform-origin:120px 120px;text-anchor:middle;fill:var(--ink)}
+.rings .n{font:600 34px var(--font);font-stretch:80%}
+.rings .t{font:500 12px var(--font);fill:var(--muted)}
+.lgd h3{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600;margin-bottom:8px}
+.lgd h3 .ui,.cl .ui{color:var(--accent)}
+.lgd ul{list-style:none;margin:0;padding:0}
+.lgd li{display:grid;grid-template-columns:12px minmax(0,1fr) auto;align-items:center;gap:12px;padding:7px 0;border-top:1px solid var(--line);border-radius:4px;cursor:default;transition:opacity .3s}
+.lgd li:last-child{border-bottom:1px solid var(--line)}
+.lgd li i{width:12px;height:12px;border-radius:50%;background:var(--c)}
+.lgd li strong{font-weight:600;font-size:15px}
+.lgd li span{font-size:13px;color:var(--muted);font-weight:500}
+.ring.dim,.lgd li.dim{opacity:.18}
+/* credenciales: cinco medallones unidos por un trazo, de la formación a las certificaciones */
+.creds{position:relative;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));column-gap:12px;row-gap:10px}
+.creds::before{content:"";position:absolute;left:10%;right:10%;top:calc(28px + 30px);height:1px;background:linear-gradient(to right,var(--line),color-mix(in srgb,var(--accent) 40%,var(--line)),var(--line))}
+.cl{grid-row:1;display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600}
+.cl.f{grid-column:1 / 3}
+.cl.c{grid-column:3 / 6}
+.md{grid-row:2;position:relative;display:grid;justify-items:center;align-content:start;gap:6px;text-align:center;color:inherit;text-decoration:none;border-radius:12px}
+.mc{display:grid;place-items:center;width:56px;height:56px;border-radius:50%;padding:11px;background:#fff;overflow:hidden;
+  box-shadow:0 0 0 1px var(--glass-edge),0 0 0 5px var(--bg),0 10px 24px -12px light-dark(rgba(30,20,90,.35),rgba(0,0,0,.8));transition:transform .3s var(--ease),box-shadow .3s}
+.mc img,.mc svg,.mc .bm{width:100%;height:100%;object-fit:contain}
+.md.fill .mc{padding:0}
+.md.fill .mc img{object-fit:cover}
+.md strong{font-size:13px;font-weight:600;line-height:1.3;margin-top:4px}
+.md > span:last-child{display:inline-flex;align-items:center;justify-content:center;gap:4px;font-size:12px;color:var(--muted);line-height:1.3}
+.md .go{width:12px;height:12px;flex:none}
+a.md:is(:hover,:focus-visible) .mc{transform:translateY(-3px);box-shadow:0 0 0 2px var(--accent),0 0 0 5px var(--bg),0 14px 28px -12px var(--accent)}
+a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:var(--accent)}
+
+/* ---------- proyectos: índice tipográfico a la izquierda y las ventanas de los proyectos apiladas a la derecha ---------- */
+.pjx{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(28px,4vw,72px);align-items:center}
+.pjl h2{font-size:clamp(38px,min(4.2vw,7.4vh),68px)}
+.shp{margin-top:6px;color:var(--muted)}
+.pjn{list-style:none;margin:clamp(16px,3vh,30px) 0 0;padding:0;border-top:1px solid var(--line)}
+.pjn li{border-bottom:1px solid var(--line)}
+.pn{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:14px;align-items:baseline;width:100%;padding:clamp(8px,1.4vh,12px) 0;border:0;background:none;color:var(--muted);font:inherit;text-align:left;cursor:pointer;transition:color .25s}
+.pn .ui{width:0;height:22px;align-self:center;color:var(--accent);transition:width .35s var(--ease)}
+.pn strong{font-size:clamp(26px,min(2.6vw,4.6vh),40px);font-weight:600;font-stretch:80%;letter-spacing:-.025em;line-height:1.05}
+.pn span{grid-column:2;font-size:13px;margin-top:2px}
+.pn:hover{color:var(--ink)}
+.pn[aria-pressed=true]{color:var(--ink)}
+.pn[aria-pressed=true] .ui{width:22px}
+.pn[aria-pressed=true] strong{color:var(--accent)}
+.pinfo{margin-top:clamp(14px,2.6vh,24px)}
+.pinfo p{color:var(--muted);max-width:48ch;font-size:15.5px}
+.pinfo .tags{margin-top:14px}
+.pinfo .acts{margin-top:clamp(14px,2.6vh,24px)}
+.pinfo.swap{animation:rise .5s var(--ease) both}
+.deck{position:relative;width:100%;max-width:calc(min(50vh,440px) * 1.6 / .8);justify-self:end;aspect-ratio:1.58}
+.deck::before{content:"";position:absolute;inset:8% 4% -6% 8%;border-radius:50%;background:radial-gradient(closest-side,color-mix(in srgb,var(--accent) 22%,transparent),transparent);filter:blur(30px);z-index:-1}
+.win{--r:0;position:absolute;left:0;bottom:0;width:80%;margin:0;border-radius:14px;overflow:hidden;background:light-dark(#E9EBF1,#0F1220);
+  box-shadow:0 0 0 1px var(--glass-edge),0 30px 60px -26px light-dark(rgba(30,20,90,.45),rgba(0,0,0,.85));
+  transform-origin:100% 0;transform:translate(calc(var(--r) * 12%),calc(var(--r) * -9%)) scale(calc(1 - var(--r) * .08));z-index:calc(5 - var(--r));
+  filter:saturate(calc(1 - var(--r) * .35)) brightness(calc(1 - var(--r) * .06));transition:transform .7s var(--ease),filter .7s;cursor:pointer}
+.win.front{cursor:default}
+.win:not(.front):hover{filter:none}
+.win .bar{display:flex;align-items:center;gap:5px;height:24px;padding:0 10px;background:var(--glass-hi);border-bottom:1px solid var(--glass-edge)}
+.win .bar i{width:7px;height:7px;border-radius:50%;background:light-dark(#C9CCD8,#3A3F57)}
+.win .bar span{margin-left:10px;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.win img,.win .ill{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;object-position:top center}
+
+/* ---------- pantallas bajas de portátil (≈ 1280×720) ---------- */
+@media (min-width:821px) and (max-height:780px){
+  .wrap{padding-block:18px}
+  .sh{margin-bottom:16px}
+  .hero{row-gap:20px}
+  .step{padding-top:16px}
+  .grp{padding-block:8px}
+  .logo.lg{width:46px;height:46px;border-radius:13px}
+  .detail h3{font-size:26px}
+  .jobs .job{padding-block:2px 8px}
+  .detail .xh{padding-block:0 12px}
+  .grp h4{margin-bottom:6px}
+  .grp ul{font-size:13.5px;line-height:1.42}
+  .grp li+li{margin-top:3px}
+  .sg{padding-block:10px}
+  .sg header{margin-bottom:8px}
+  .tj{padding-block:8px}
+  .rings{width:170px}
+  .lgd li{padding-block:5px}
+  .mc{width:48px;height:48px;padding:9px}
+  .creds::before{top:calc(28px + 26px)}
+  .facts{margin-top:14px}
+  .tj.ms{padding-block:5px}
+  .skcol{gap:12px}
+  #skills{--hw:190px}
+  /* en pantallas bajas la captura se recorta por abajo (siempre igual, sin zoom) para que la sección quepa */
+  .list li{padding:6px 0}
+  #sobre-mi dl{margin-bottom:16px}
+  dl div{padding-block:10px}
+  .langs{margin-top:6px}
+  .list .row{grid-template-columns:32px minmax(0,1fr) auto}
+  .list .org{width:32px;height:32px;padding:4px}
+  .pills li{font-size:13px}
+  .pills .pb{padding:2px 9px}
+}
+
+/* ---------- tamaños intermedios ---------- */
+@media (max-width:1180px){
+  .top{grid-template-columns:auto 1fr auto}
+  .tabs{justify-self:center}
+  .brand > span:last-child,.actions .btn{display:none}
+  .about{grid-template-columns:minmax(0,1fr)}
+  .about .txt{max-width:72ch}
+  .skg{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .sg:not(:nth-child(3n+1)),.sg:nth-child(n+4){border-left:0;border-top:0}
+  .sg:nth-child(even){border-left:1px solid var(--line)}
+  .sg:nth-child(n+3){border-top:1px solid var(--line)}
+}
+
+/* ---------- móvil ---------- */
+@media (max-width:820px){
+  .top{grid-template-columns:1fr auto;padding:10px 16px;row-gap:10px}
+  .brand > span:last-child{display:block}
+  .tabs{grid-column:1 / -1;grid-row:2;justify-self:stretch;overflow-x:auto;scrollbar-width:none;border-radius:14px}
+  .tabs::-webkit-scrollbar{display:none}
+  .flt-l{flex-basis:100%;margin:0 0 2px}
+  .fb{min-height:44px}
+  .tab{border-radius:10px;padding:0 14px}
+  .ind{border-radius:10px}
+  .wrap{padding:24px 16px 32px;justify-content:flex-start}
+  .hero{grid-template-columns:minmax(0,1fr);grid-template-rows:none}
+  .photo{grid-row:1;width:112px;border-radius:20px}
+  .photo figcaption{display:none}
+  .hero h1{margin-top:16px}
+  .career{grid-template-columns:minmax(0,1fr);border-top:0;border-left:1px solid var(--line);margin-left:4px}
+  .step{padding:2px 0 16px 22px}
+  .step::before{top:6px;left:-5px}
+  .about,.ct,.xp{grid-template-columns:minmax(0,1fr)}
+  dl,.edu{grid-template-columns:minmax(0,1fr)}
+  dl{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .langs{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .jobs{width:100%}
+  .job{flex:1 1 0;padding-right:10px}
+  .detail .xh{grid-template-columns:minmax(0,1fr)}
+  .detail .tags{justify-content:flex-start}
+  .groups,.groups[data-n="3"],.skg{grid-template-columns:minmax(0,1fr)}
+  .xpw{grid-template-columns:minmax(0,1fr);gap:20px}
+  .langviz{grid-template-columns:minmax(0,1fr);justify-items:center}
+  .lgd{width:100%}
+  .creds{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:18px}
+  .creds::before{display:none}
+  .cl,.md{grid-row:auto}
+  .cl.f,.cl.c{grid-column:1 / -1}
+  .cl.f{order:0}
+  .md.ed{order:1}
+  .cl.c{order:2;margin-top:6px}
+  .md:not(.ed){order:3}
+  .pjx{grid-template-columns:minmax(0,1fr)}
+  .deck{order:-1;justify-self:stretch;max-width:none;margin-bottom:8px}
+  #skills{grid-template-columns:minmax(0,1fr);gap:22px}
+  #skills::before,#skills .sg::after{display:none}
+  .hub{order:-1}
+  .skcol.l .sg header,.skcol.l .sg .pills{justify-content:flex-start;text-align:left}
+  .skcol.l .sg header .ui{order:0}
+  #skills .sg+.sg{border-top:0}
+  .grp,.groups[data-n="3"] .grp,.sg,.sg:nth-child(even),.sg:not(:nth-child(3n+1)){border-left:0}
+  .grp+.grp,.groups[data-n="3"] .grp+.grp,.sg+.sg{border-top:1px solid var(--line)}
+  .groups,.skg{margin-inline:0}
+  .grp,.sg{padding-inline:0}
+  dl div{padding-inline:12px}
+  dl div:first-child,dl .lg{padding-left:0}
+  .ct h2{font-size:clamp(56px,18vw,96px)}
+  .bot{grid-template-columns:1fr auto;padding:8px 16px}
+  .hint{display:none}
+  .seg{width:22px}
+}
+@media (max-width:380px){
+  dl{grid-template-columns:minmax(0,1fr)}
+  dl div:nth-child(2),dl div:nth-child(3){border-left:0;border-top:1px solid var(--line)}
+  dl div{padding-left:0}
+  .job .logo{display:none}
+  .where span{display:none}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .ring,.win{transition:none}
+  *,*::before,*::after{animation:none!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 19h14"/></symbol>
+  <symbol id="i-briefcase" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M3 13h18"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 5l-4 14"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z"/></symbol>
+  <symbol id="i-cap" viewBox="0 0 24 24"><path d="m2 9 10-5 10 5-10 5z"/><path d="M6 11v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5M22 9v6"/></symbol>
+  <symbol id="i-award" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="m8.5 14-1.5 7 5-3 5 3-1.5-7"/></symbol>
+  <symbol id="i-server" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01"/></symbol>
+  <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M7 18a4.5 4.5 0 0 1-.6-9 6 6 0 0 1 11.4 1.5A3.75 3.75 0 0 1 17.5 18z"/></symbol>
+  <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5.5" rx="8" ry="3"/><path d="M4 5.5v13c0 1.7 3.6 3 8 3s8-1.3 8-3v-13M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/></symbol>
+  <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M11 3l1.8 5.2L18 10l-5.2 1.8L11 17l-1.8-5.2L4 10l5.2-1.8z"/><path d="M19 14l.8 2.2L22 17l-2.2.8L19 20l-.8-2.2L16 17l2.2-.8z"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 3 8.3 7 10 4-1.7 7-5.5 7-10V6z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M21.5 20a6.5 6.5 0 0 0-4-6"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></symbol>
+</svg>
+<div class="app">
+
+  <header class="top">
+    <a class="brand" href="#inicio" aria-label="Mostafa Abdel-Illah, ir al inicio">
+      <span class="mk" aria-hidden="true">MA</span>
+      <span><strong>Mostafa Abdel-Illah</strong><small>Backend Developer .NET</small></span>
+    </a>
+    <nav class="tabs" id="tabs" aria-label="Secciones">
+      <span class="ind" id="ind" aria-hidden="true"></span>
+      <a class="tab" href="#inicio">Inicio</a>
+      <a class="tab" href="#sobre-mi">Sobre mí</a>
+      <a class="tab" href="#experiencia">Experiencia</a>
+      <a class="tab" href="#habilidades">Habilidades</a>
+      <a class="tab" href="#proyectos">Proyectos</a>
+      <a class="tab" href="#contacto">Contacto</a>
+    </nav>
+    <div class="actions">
+      <button class="icon" id="theme" type="button" aria-label="Cambiar entre modo claro y oscuro">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor" stroke="none"/></svg>
+      </button>
+      <a class="btn sm main" href="#contacto">Contactar</a>
+    </div>
+  </header>
+
+  <main class="stage" id="stage">
+    <div class="track" id="track">
+
+      <!-- Inicio -->
+      <section class="slide" id="inicio" aria-label="Inicio"><div class="wrap hero">
+        <div class="intro">
+          <p class="avail in" style="--d:.05s"><i aria-hidden="true"></i>Abierto a nuevas oportunidades en Barcelona o en remoto</p>
+          <h1 class="in" style="--d:.15s">Mostafa Abdel&#8209;Illah El Ansari</h1>
+          <p class="role in" style="--d:.3s">Backend Developer .NET, C# y Azure</p>
+          <p class="lead in" style="--d:.38s">Desarrollo APIs REST y microservicios con C# y ASP.NET Core sobre Microsoft Azure. Más de 3 años construyendo, manteniendo y dando soporte a sistemas en producción.</p>
+          <div class="btns in" style="--d:.46s">
+            <a class="btn main" href="#contacto"><svg class="ui" aria-hidden="true"><use href="#i-mail"/></svg>Contactar</a>
+            <a class="btn" href="cv.pdf" download="CV-Mostafa-Abdel-Illah-El-Ansari.pdf"><svg class="ui" aria-hidden="true"><use href="#i-download"/></svg>Descargar CV</a>
+            <a class="btn" href="https://github.com/mabdelansari" target="_blank" rel="noopener"><i class="bm" style="--m:url(https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons/github/github-original.svg)" aria-hidden="true"></i>GitHub</a>
+          </div>
+        </div>
+        <figure class="photo in" style="--d:.2s">
+          <img src="profile.jpg" alt="Foto de Mostafa Abdel-Illah El Ansari" width="800" height="800">
+          <figcaption><span class="logo sm"><img src="img/raona.png" alt="Logo de Raona" width="300" height="300"></span><div><strong>Backend Developer en Raona</strong><span>Desde diciembre de 2023</span></div></figcaption>
+        </figure>
+        <h2 class="sr">Trayectoria</h2>
+        <ol class="career in" id="career" style="--d:.6s"></ol>
+      </div></section>
+
+      <!-- Sobre mí -->
+      <section class="slide" id="sobre-mi" aria-labelledby="h-sobre"><div class="wrap">
+        <div class="sh"><h2 id="h-sobre">Sobre mí</h2></div>
+        <div class="about">
+          <div class="txt">
+            <p class="big">Soy desarrollador backend especializado en el ecosistema .NET y Microsoft Azure. Me gusta el código mantenible, bien testeado y pensado para crecer.</p>
+            <p>En Raona desarrollo funcionalidades de principio a fin: APIs y microservicios, procesos asíncronos con colas, almacenamiento en Azure y servicios de Windows para la transferencia de ficheros. También participo en el análisis y la estimación de tareas y en la resolución de incidencias en producción.</p>
+            <p>Aplico SOLID, Clean Architecture y patrones de diseño, y uso herramientas de IA como Claude y OpenAI Codex para trabajar de forma más rápida y precisa.</p>
+            <dl class="facts">
+              <div><dt><svg class="ui" aria-hidden="true"><use href="#i-briefcase"/></svg>Experiencia</dt><dd>+3 años</dd></div>
+              <div><dt><svg class="ui" aria-hidden="true"><use href="#i-code"/></svg>Especialidad</dt><dd>Backend .NET y Azure</dd></div>
+              <div><dt><svg class="ui" aria-hidden="true"><use href="#i-pin"/></svg>Ubicación</dt><dd>Barcelona</dd></div>
+            </dl>
+          </div>
+          <div class="me">
+            <div class="langviz" id="langviz"></div>
+            <div class="creds">
+              <h3 class="cl f"><svg class="ui" aria-hidden="true"><use href="#i-cap"/></svg>Formación</h3>
+              <h3 class="cl c"><svg class="ui" aria-hidden="true"><use href="#i-award"/></svg>Certificaciones</h3>
+              <div class="md ed"><span class="mc" aria-hidden="true"><img src="img/provencana.jpg" alt="" width="56" height="56" loading="lazy"></span><strong>CFGS Desarrollo de Aplicaciones Web</strong><span>Ins Provençana, 2021 – 2023</span></div>
+              <div class="md ed"><span class="mc" aria-hidden="true"><img src="img/esplai.png" alt="" width="56" height="56" loading="lazy"></span><strong>Bootcamp Java &amp; SQL</strong><span>Fundación Esplai, 2019</span></div>
+              <a class="md" href="https://learn.microsoft.com/en-us/users/mostafaabdelillahelansari-7255/credentials/d594234a6d2d6ef9" target="_blank" rel="noopener"><span class="mc" aria-hidden="true"><svg viewBox="0 0 23 23"><path fill="#F25022" d="M1 1h10v10H1z"/><path fill="#7FBA00" d="M12 1h10v10H12z"/><path fill="#00A4EF" d="M1 12h10v10H1z"/><path fill="#FFB900" d="M12 12h10v10H12z"/></svg></span><strong>Azure Fundamentals (AZ-900)</strong><span>Microsoft, ver credencial<svg class="ui go" aria-hidden="true"><use href="#i-arrow"/></svg></span></a>
+              <a class="md" href="https://www.freecodecamp.org/certification/mostabdel07/foundational-c-sharp-with-microsoft" target="_blank" rel="noopener"><span class="mc" aria-hidden="true"><i class="bm" style="--m:url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/freecodecamp.svg);color:#0A0A23"></i></span><strong>Foundational C# with Microsoft</strong><span>freeCodeCamp, ver credencial<svg class="ui go" aria-hidden="true"><use href="#i-arrow"/></svg></span></a>
+              <div class="md"><span class="mc" aria-hidden="true"><img src="img/cambridge.png" alt="" width="56" height="56" loading="lazy"></span><strong>Cambridge First Certificate (B2)</strong><span>Cambridge English</span></div>
+            </div>
+          </div>
+        </div>
+      </div></section>
+
+      <!-- Experiencia -->
+      <section class="slide" id="experiencia" aria-labelledby="h-xp"><div class="wrap">
+        <div class="xpw">
+          <div class="xpl"><h2 id="h-xp">Experiencia</h2><ol class="tl" id="jobs" aria-label="Recorrido: elige un empleo"></ol></div>
+          <article class="detail" id="detail" aria-live="polite"></article>
+        </div>
+      </div></section>
+
+      <!-- Habilidades -->
+      <section class="slide" id="habilidades" aria-labelledby="h-sk"><div class="wrap">
+        <div class="sh xsh"><h2 id="h-sk">Habilidades</h2>
+          <div class="flt" role="group" aria-label="Dónde lo he usado"><span class="flt-l">Dónde lo he usado</span>
+            <button class="fb" type="button" data-f="" aria-pressed="true">Todo</button><button class="fb" type="button" data-f="r" aria-pressed="false">Raona</button><button class="fb" type="button" data-f="s" aria-pressed="false">Soficat Xerox</button><button class="fb" type="button" data-f="p" aria-pressed="false">Proyectos</button>
+          </div></div>
+        <div class="skg" id="skills"></div>
+        <p class="sr" id="sk-live" aria-live="polite"></p>
+        <div class="skfoot">
+          <p class="also"><strong>También he trabajado con</strong> React, Next.js, Node.js, Express, Laravel, Java, MongoDB, Firestore, Tailwind CSS, Linux y NGINX. <span class="hint-sk">Pulsa una tecnología para ver dónde la he usado.</span></p>
+          <div class="skinfo" id="skinfo" aria-live="polite" hidden></div>
+        </div>
+      </div></section>
+
+      <!-- Proyectos -->
+      <section class="slide" id="proyectos" aria-labelledby="h-pj"><div class="wrap">
+        <div class="pjx">
+          <div class="pjl">
+            <h2 id="h-pj">Proyectos</h2><p class="shp">Lo que construyo fuera del trabajo.</p>
+            <ol class="pjn" id="pjs" aria-label="Elige un proyecto"></ol>
+            <div class="pinfo" id="pdetail" aria-live="polite"></div>
+          </div>
+          <div class="deck" id="deck"></div>
+        </div>
+      </div></section>
+
+      <!-- Contacto -->
+      <section class="slide" id="contacto" aria-labelledby="h-ct"><div class="wrap">
+        <div class="ct">
+          <div class="txt">
+            <h2 id="h-ct">¿Hablamos?</h2>
+            <p>Estoy abierto a ofertas de Backend Developer .NET en Barcelona o en remoto. Escríbeme y te respondo lo antes posible.</p>
+          </div>
+          <ul class="links">
+            <li><a href="mailto:m.abdelansari@gmail.com"><span class="ci" aria-hidden="true"><svg class="ui" aria-hidden="true"><use href="#i-mail"/></svg></span><strong>Email</strong><small>m.abdelansari@gmail.com</small><span class="go" aria-hidden="true"><svg class="ui" aria-hidden="true"><use href="#i-arrow"/></svg></span></a></li>
+            <li><a href="https://www.linkedin.com/in/mabdelansari" target="_blank" rel="noopener"><span class="ci" aria-hidden="true"><i class="bm" style="--m:url(https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons/linkedin/linkedin-plain.svg)" aria-hidden="true"></i></span><strong>LinkedIn</strong><small>linkedin.com/in/mabdelansari</small><span class="go" aria-hidden="true"><svg class="ui" aria-hidden="true"><use href="#i-arrow"/></svg></span></a></li>
+            <li><a href="https://github.com/mabdelansari" target="_blank" rel="noopener"><span class="ci" aria-hidden="true"><i class="bm" style="--m:url(https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons/github/github-original.svg)" aria-hidden="true"></i></span><strong>GitHub</strong><small>github.com/mabdelansari</small><span class="go" aria-hidden="true"><svg class="ui" aria-hidden="true"><use href="#i-arrow"/></svg></span></a></li>
+            <li><a class="dl" href="cv.pdf" download="CV-Mostafa-Abdel-Illah-El-Ansari.pdf"><span class="ci" aria-hidden="true"><svg class="ui" aria-hidden="true"><use href="#i-download"/></svg></span><strong>Currículum</strong><small>Descarga en PDF</small><span class="go" aria-hidden="true"><svg class="ui" aria-hidden="true"><use href="#i-download"/></svg></span></a></li>
+          </ul>
+        </div>
+        <p class="foot">© <span id="year">2026</span> Mostafa Abdel-Illah El Ansari. Hecho a mano y publicado en GitHub Pages.</p>
+      </div></section>
+
+    </div>
+  </main>
+
+  <footer class="bot">
+    <p class="where" aria-live="polite"><strong id="where">Inicio</strong><span id="count">1 de 6</span></p>
+    <div class="pager">
+      <button class="icon" id="prev" type="button" aria-label="Sección anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
+      <ol class="segs" id="segs"></ol>
+      <button class="icon" id="next" type="button" aria-label="Sección siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+    </div>
+    <p class="hint">Muévete con <kbd>←</kbd> <kbd>→</kbd> o la rueda del ratón</p>
+  </footer>
+
+</div>
+
+<script>
+{
+  const career = [
+    {when:'2019', what:'Bootcamp Java & SQL', where:'Fundación Esplai', go:'sobre-mi'},
+    {when:'2021 – 2023', what:'CFGS Desarrollo de Aplicaciones Web', where:'Ins Provençana', go:'sobre-mi'},
+    {when:'09/2023', what:'Full Stack Developer', where:'Soficat Xerox', go:'experiencia', job:1},
+    {when:'12/2023', what:'Backend Developer', where:'Raona', go:'experiencia', job:0},
+    {when:'Hoy', what:'Backend .NET y Azure', where:'Abierto a oportunidades', go:'contacto', now:true}
+  ];
+  const jobs = [
+    {role:'Backend Developer', short:'Raona', co:'Raona, consultora tecnológica Microsoft Partner', when:'12/2023 – Actualidad', groups:[
+      {t:'APIs y servicios', icon:'code', items:[
+        'Desarrollo de funcionalidades end-to-end en APIs REST y microservicios con C#, ASP.NET Core y Entity Framework Core sobre Microsoft Azure.',
+        'Desarrollo y mantenimiento de servicios de Windows en .NET desplegados en servidor remoto para la transferencia automatizada de ficheros.',
+        'Procesamiento, serialización y transformación de datos en JSON y XML, con transformaciones XSL/XSLT.']},
+      {t:'Azure y datos', icon:'cloud', items:[
+        'Consultas SQL en SQL Server y acceso a datos con Entity Framework Core sobre SQL Server y Azure Cosmos DB, optimizando el rendimiento.',
+        'Procesamiento asíncrono basado en colas de mensajería con Azure Functions y Azure Storage Queues.',
+        'Almacenamiento de ficheros y datos en Azure Blob Storage (containers) y Azure Table Storage.']},
+      {t:'Producción y equipo', icon:'users', items:[
+        'Resolución de incidencias en producción: diagnóstico con Application Insights y el Visor de eventos de Windows, corrección y despliegue mediante pipelines de Azure DevOps.',
+        'Análisis técnico y estimación de tareas y funcionalidades junto al equipo, como base para la planificación de sprints en Scrum.']},
+      {t:'Calidad y seguridad', icon:'shield', items:[
+        'Seguridad de las APIs con autenticación JWT, siguiendo recomendaciones OWASP.',
+        'Pruebas unitarias con xUnit y Moq para garantizar la calidad del código.']}
+    ], tags:['C#','ASP.NET Core','Azure','SQL Server','Cosmos DB','Azure DevOps','xUnit'], logo:'img/raona.png'},
+    {role:'Full Stack Developer', short:'Soficat Xerox', co:'Soficat Xerox', when:'09/2023 – 12/2023', groups:[
+      {t:'Backend', icon:'server', items:[
+        'Desarrollo de APIs REST y aplicaciones web con PHP 8, Symfony 6 y MySQL, con autenticación JWT.',
+        'Integración con APIs y servicios de terceros.',
+        'Mantenimiento evolutivo y corrección de errores en aplicaciones web existentes.']},
+      {t:'Frontend', icon:'monitor', items:['Desarrollo de interfaces responsive con JavaScript, jQuery, Bootstrap, HTML y CSS.']},
+      {t:'Entornos y equipo', icon:'layers', items:[
+        'Aplicaciones contenerizadas con Docker y Docker Compose para los entornos de desarrollo.',
+        'Trabajo en equipo con metodología Agile/Scrum.']}
+    ], tags:['PHP 8','Symfony 6','MySQL','JavaScript','JWT','Docker'], logo:'img/soficat.png'}
+  ];
+  const skills = [
+    {name:'Backend', icon:'server', items:['C#','.NET','ASP.NET Core','Entity Framework Core','LINQ','Windows Services','PHP','Symfony']},
+    {name:'Cloud y DevOps', icon:'cloud', items:['Azure Functions','Storage Queues','Blob Storage','Table Storage','Application Insights','Azure DevOps','CI/CD','Docker']},
+    {name:'Datos', icon:'db', items:['SQL Server','Azure Cosmos DB','MySQL','JSON','XML','XSL/XSLT']},
+    {name:'Arquitectura y calidad', icon:'layers', items:['APIs REST','Microservicios','Clean Architecture','SOLID','Patrones de diseño','JWT','OWASP','xUnit','Moq']},
+    {name:'Frontend', icon:'monitor', items:['Angular','TypeScript','JavaScript','React Native','HTML5','CSS3 / SCSS','Bootstrap']},
+    {name:'IA y herramientas', icon:'spark', items:['Claude','OpenAI Codex','Agentes de IA','Agent Skills','AGENTS.md','Prompt engineering','Git','GitFlow','Jira','Scrum']}
+  ];
+  // r = Raona, s = Soficat Xerox, p = proyectos propios. Según el CV y lo confirmado por Mostafa (todo lo que no era de Soficat ni de un proyecto, lo usa en Raona).
+  const used = {
+    r:['C#','.NET','ASP.NET Core','Entity Framework Core','Windows Services','Azure Functions','Storage Queues','Blob Storage','Table Storage','Application Insights','Azure DevOps','CI/CD',
+       'SQL Server','Azure Cosmos DB','JSON','XML','XSL/XSLT','APIs REST','Microservicios','JWT','OWASP','xUnit','Moq','Scrum','LINQ','Git','GitFlow',
+       'Clean Architecture','SOLID','Patrones de diseño','Angular','Claude','OpenAI Codex','Agentes de IA','Agent Skills','AGENTS.md','Prompt engineering','Jira'],
+    s:['PHP','Symfony','MySQL','Docker','APIs REST','JWT','JavaScript','HTML5','CSS3 / SCSS','Bootstrap','Scrum'],
+    p:['React Native','TypeScript','JavaScript','HTML5','CSS3 / SCSS']
+  };
+  const where = i => Object.keys(used).filter(k => used[k].includes(i)).join(' ');
+  const projects = [
+    {name:'Mostrain', kind:'App móvil', status:'En desarrollo', url:'https://mostrain.com', shot:'img/mostrain.png', text:'App móvil para registrar rutinas y entrenamientos de gimnasio, pensada para seguir el progreso de forma sencilla.', tags:['React Native','Expo','TypeScript']},
+    {name:'AJI', kind:'Web', url:'https://aji.mostrain.com', shot:'img/aji.jpg', text:'Web de Acció Jove per la Inclusió, entidad juvenil de Ciutat Vella (Barcelona) que organiza deporte y cultura. En catalán, castellano, inglés y árabe.', tags:['HTML','CSS','JavaScript','Vite']},
+    {name:'Learn Code Path', kind:'Web', url:'https://github.com/mabdelansari/learn-code-path', visit:'Ver el código en GitHub',
+     ill:[['API','REST con Laravel y JWT'],['Web','Next.js con SSR'],['Pagos','Integración con Stripe'],['Prod','NGINX con SSL']],
+     text:'Plataforma de cursos con API REST en Laravel, frontend Next.js con SSR, JWT y pagos con Stripe, en producción con NGINX y SSL.', tags:['Laravel','Next.js','Stripe']}
+  ];
+
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  /* iconos de tecnologías: Devicon a color (d) o Simple Icons como máscara monocroma (s). mono: logo negro que se invierte en oscuro */
+  const DV = 'https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons/', SI = 'https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/';
+  const tech = {
+    'C#':{d:'csharp'}, '.NET':{d:'dot-net'}, 'ASP.NET Core':{d:'dotnetcore'}, 'Entity Framework Core':{d:'dotnetcore'}, 'LINQ':{d:'csharp'},
+    'Windows Services':{d:'windows11'}, 'PHP':{d:'php'}, 'PHP 8':{d:'php'}, 'Symfony':{d:'symfony',mono:1}, 'Symfony 6':{d:'symfony',mono:1},
+    'Azure':{d:'azure'}, 'Azure Functions':{d:'azure'}, 'Storage Queues':{d:'azure'}, 'Blob Storage':{d:'azure'}, 'Table Storage':{d:'azure'},
+    'Application Insights':{d:'azure'}, 'Azure DevOps':{d:'azuredevops'}, 'Docker':{d:'docker'},
+    'SQL Server':{d:'microsoftsqlserver'}, 'Azure Cosmos DB':{d:'cosmosdb'}, 'Cosmos DB':{d:'cosmosdb'}, 'MySQL':{d:'mysql'},
+    'JSON':{d:'json'}, 'XML':{d:'xml'}, 'XSL/XSLT':{d:'xml'}, 'JWT':{s:'jsonwebtokens'}, 'OWASP':{s:'owasp'},
+    'Angular':{d:'angular'}, 'Angular 18':{d:'angular'}, 'TypeScript':{d:'typescript'}, 'JavaScript':{d:'javascript'},
+    'React Native':{d:'react'}, 'HTML5':{d:'html5'}, 'HTML':{d:'html5'}, 'CSS':{d:'css3'}, 'CSS3 / SCSS':{d:'sass'}, 'SCSS':{d:'sass'},
+    'Bootstrap':{d:'bootstrap'}, 'Claude':{s:'claude',c:'#D97757'}, 'OpenAI Codex':{s:'openai'}, 'Git':{d:'git'}, 'GitFlow':{d:'git'},
+    'Jira':{d:'jira'}, 'Expo':{s:'expo'}, 'GitHub Pages':{s:'githubpages'},
+    'Vite':{d:'vitejs'}, 'Laravel':{d:'laravel'}, 'Next.js':{d:'nextjs',mono:1}, 'Stripe':{s:'stripe',c:'#635BFF'}, 'NGINX':{d:'nginx'}
+  };
+  const ic = name => {
+    const t = tech[name]; if (!t) return '';
+    if (t.d) return `<img class="ti${t.mono ? ' mono' : ''}" src="${DV}${t.d}/${t.d}-original.svg" alt="" width="16" height="16" loading="lazy">`;
+    return `<i class="ti si" style="--m:url(${SI}${t.s}.svg)${t.c ? ';color:' + t.c : ''}" aria-hidden="true"></i>`;
+  };
+  const ui = id => `<svg class="ui" aria-hidden="true"><use href="#i-${id}"/></svg>`;
+  const logo = (j, cls = '') => j.logo
+    ? `<span class="logo ${cls}"><img src="${j.logo}" alt="Logo de ${esc(j.short)}" width="300" height="300"></span>`
+    : `<span class="logo txt ${cls}" role="img" aria-label="${esc(j.short)}">${esc(j.mark)}</span>`;
+  // duración entre dos fechas MM/AAAA del CV; «Actualidad» es el mes en curso
+  const dur = when => {
+    const [a, b] = when.split('–').map(x => x.trim());
+    const m = x => { const r = /^(\d{2})\/(\d{4})$/.exec(x); return r ? +r[2] * 12 + (+r[1] - 1) : null; };
+    const now = new Date(), end = m(b) ?? now.getFullYear() * 12 + now.getMonth(), n = end - m(a);
+    const y = Math.floor(n / 12), mo = n % 12;
+    const part = (v, one, many) => v ? `${v} ${v === 1 ? one : many}` : '';
+    return [part(y, 'año', 'años'), part(mo, 'mes', 'meses')].filter(Boolean).join(' y ');
+  };
+  const tags = t => `<div class="tags">${t.map(x => `<span>${ic(x)}${esc(x)}</span>`).join('')}</div>`;
+
+  /* ---- render ---- */
+  $('career').innerHTML = career.map(s =>
+    `<li${s.now ? ' class="now"' : ''}><button class="step" type="button" data-go="${s.go}"${s.job != null ? ` data-job="${s.job}"` : ''}>
+      <b>${esc(s.when)}</b><strong>${esc(s.what)}</strong><span>${esc(s.where)}</span></button></li>`).join('');
+
+  // recorrido: empleos (se eligen) y, debajo, la formación como hitos anteriores
+  $('jobs').innerHTML = jobs.map((j, k) =>
+    `<li><button class="tj" type="button" data-job="${k}" aria-pressed="false" aria-controls="detail">
+      <span class="dot" aria-hidden="true"></span><b>${esc(j.when)}</b><strong>${esc(j.role)}</strong>
+      <span class="co">${logo(j)}${esc(j.short)}<i>${dur(j.when)}</i></span></button></li>`).join('')
+    + career.filter(c => c.go === 'sobre-mi').map(c =>
+    `<li><button class="tj ms" type="button" data-go="sobre-mi"><span class="dot" aria-hidden="true"></span><b>${esc(c.when)}</b><strong>${esc(c.what)}</strong><span class="co">${esc(c.where)}</span></button></li>`).reverse().join('');
+
+  // mapa: el stack principal en el centro y los seis grupos a los lados, unidos a él
+  const group = s => `<section class="sg"><header>${ui(s.icon)}<h3>${esc(s.name)}</h3></header>
+      <ul class="pills">${s.items.map(i => `<li data-u="${where(i)}"><button class="pb" type="button" aria-pressed="false" data-t="${esc(i)}">${ic(i)}${esc(i)}</button></li>`).join('')}</ul></section>`;
+  const core = ['C#', '.NET', 'ASP.NET Core', 'SQL Server'];
+  $('skills').innerHTML = `<div class="skcol l">${[0, 2, 3].map(k => group(skills[k])).join('')}</div>
+    <div class="hub"><div class="orb"><span class="k">Stack principal</span><strong>.NET y Azure</strong>
+      <ul class="core">${core.map(i => `<li><button class="pb" type="button" aria-pressed="false" data-t="${esc(i)}" title="${esc(i)}" aria-label="${esc(i)}">${ic(i)}</button></li>`).join('')}</ul></div></div>
+    <div class="skcol r">${[1, 4, 5].map(k => group(skills[k])).join('')}</div>`;
+
+  // índice: los nombres en grande son el selector; a la derecha, las ventanas de los tres proyectos apiladas
+  $('pjs').innerHTML = projects.map((p, k) =>
+    `<li><button class="pn" type="button" data-p="${k}" aria-pressed="false" aria-controls="pdetail">${ui('arrow')}<strong>${esc(p.name)}</strong><span>${esc(p.kind)}${p.status ? ', ' + esc(p.status.toLowerCase()) : ''}</span></button></li>`).join('');
+  const host = u => u.replace(/^https?:\/\//, '');
+  $('deck').innerHTML = projects.map((p, k) =>
+    `<figure class="win" data-p="${k}"><div class="bar" aria-hidden="true"><i></i><i></i><i></i><span>${esc(host(p.url))}</span></div>${p.shot
+      ? `<img src="${p.shot}" alt="Vista previa de ${esc(p.name)}">`
+      : `<div class="ill" aria-hidden="true">${p.ill.map(([a, b]) => `<p><b>${esc(a)}</b>${esc(b)}</p>`).join('')}</div>`}</figure>`).join('');
+  let proj = -1;
+  function showProj(k) {
+    if (k === proj) return;
+    proj = k;
+    const p = projects[k], d = $('pdetail'), n = projects.length;
+    $('pjs').querySelectorAll('.pn').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.p === k)));
+    // la ventana elegida al frente; las demás, detrás y desplazadas
+    $('deck').querySelectorAll('.win').forEach(w => { const r = (+w.dataset.p - k + n) % n; w.style.setProperty('--r', r); w.classList.toggle('front', !r); });
+    const label = p.visit || 'Visitar ' + host(p.url);
+    d.innerHTML = `<p>${esc(p.text)}</p>${tags(p.tags)}
+      <div class="acts"><a class="btn main" href="${esc(p.url)}" target="_blank" rel="noopener">${esc(label)}${ui('arrow')}</a></div>`;
+    d.classList.remove('swap'); void d.offsetWidth; d.classList.add('swap');
+  }
+  $('pjs').addEventListener('click', e => { const b = e.target.closest('.pn'); if (b) showProj(+b.dataset.p); });
+  $('deck').addEventListener('click', e => { const w = e.target.closest('.win:not(.front)'); if (w) showProj(+w.dataset.p); });
+  showProj(0);
+
+  $('year').textContent = new Date().getFullYear();
+
+  /* ---- sobre mí: idiomas como anillos concéntricos (nativo = anillo completo, B2 = 2,5 de 3, básico = 1 de 3) ---- */
+  const langs = [['Español', 'Nativo', 100], ['Catalán', 'Nativo', 100], ['Árabe', 'Nativo', 100], ['Inglés', 'B2', 83.3], ['Francés', 'Básico', 33.3]];
+  const shade = [100, 80, 64, 50, 38];
+  $('langviz').innerHTML = `<svg class="rings" viewBox="0 0 240 240" aria-hidden="true">${langs.map((l, k) => { const r = 110 - k * 17;
+      return `<circle class="trk" cx="120" cy="120" r="${r}"/><circle class="ring" data-i="${k}" cx="120" cy="120" r="${r}" pathLength="100" style="--p:${l[2]};--d:${k * .12}s;--c:color-mix(in srgb,var(--accent) ${shade[k]}%,transparent)"/>`; }).join('')}
+      <text x="120" y="118" class="n">5</text><text x="120" y="138" class="t">idiomas</text></svg>
+    <div class="lgd"><h3><svg class="ui" aria-hidden="true"><use href="#i-globe"/></svg>Idiomas</h3><ul>${langs.map((l, k) =>
+      `<li data-i="${k}" tabindex="0" style="--c:color-mix(in srgb,var(--accent) ${shade[k]}%,transparent)"><i aria-hidden="true"></i><strong>${l[0]}</strong><span>${l[1]}</span></li>`).join('')}</ul></div>`;
+  // al señalar un idioma de la leyenda, su anillo se queda encendido y el resto se apaga
+  const lightRing = k => document.querySelectorAll('#langviz .ring, #langviz li').forEach(e => e.classList.toggle('dim', k != null && e.dataset.i !== String(k)));
+  $('langviz').addEventListener('pointerover', e => { const li = e.target.closest('li[data-i]'); lightRing(li ? li.dataset.i : null); });
+  $('langviz').addEventListener('pointerleave', () => lightRing(null));
+  $('langviz').addEventListener('focusin', e => { const li = e.target.closest('li[data-i]'); if (li) lightRing(li.dataset.i); });
+  $('langviz').addEventListener('focusout', () => lightRing(null));
+
+  /* ---- habilidades: filtro por empleo o proyectos ---- */
+  const fnames = {r:'Raona', s:'Soficat Xerox', p:'mis proyectos'};
+  $('h-sk').closest('.sh').querySelector('.flt').addEventListener('click', e => {
+    const b = e.target.closest('.fb'); if (!b) return;
+    const f = b.dataset.f, grid = $('skills');
+    document.querySelectorAll('.fb').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    if (f) grid.dataset.f = f; else delete grid.dataset.f;
+    let n = 0;
+    grid.querySelectorAll('.sg').forEach(g => {
+      let k = 0;
+      g.querySelectorAll('li').forEach(li => { const on = !!f && li.dataset.u.split(' ').includes(f); li.classList.toggle('on', on); k += on; });
+      g.classList.toggle('none', !!f && !k); n += k;
+    });
+    $('sk-live').textContent = f ? `${n} tecnologías usadas en ${fnames[f]}` : 'Todas las tecnologías';
+  });
+
+  /* ---- habilidades: ficha de una tecnología (dónde la he usado, según el CV) ---- */
+  const alias = {'HTML5':'HTML', 'CSS3 / SCSS':'CSS'};
+  const projOf = t => projects.map((p, k) => [p, k]).filter(([p]) => p.tags.includes(t) || p.tags.includes(alias[t]));
+  const list = a => a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' y ' + a[a.length - 1];
+  let skSel = null;
+  function showSkill(t) {
+    const info = $('skinfo'), also = document.querySelector('.also');
+    skSel = t === skSel ? null : t;
+    document.querySelectorAll('.pb').forEach(b => { const on = b.dataset.t === skSel; b.setAttribute('aria-pressed', String(on)); b.parentElement.classList.toggle('sel', on); });
+    if (!skSel) { info.hidden = true; also.hidden = false; return; }
+    const u = used.r.includes(t), v = used.s.includes(t), ps = projOf(t);
+    const parts = [], acts = [];
+    if (u) { parts.push(`en Raona (${jobs[0].when.toLowerCase()})`); acts.push(`<button class="lk" type="button" data-go="experiencia" data-job="0">Ver Raona${ui('arrow')}</button>`); }
+    if (v) { parts.push(`en Soficat Xerox (${jobs[1].when})`); acts.push(`<button class="lk" type="button" data-go="experiencia" data-job="1">Ver Soficat Xerox${ui('arrow')}</button>`); }
+    if (ps.length) { parts.push((ps.length > 1 ? 'en los proyectos ' : 'en el proyecto ') + list(ps.map(([p]) => p.name)));
+      ps.forEach(([p, k]) => acts.push(`<button class="lk" type="button" data-go="proyectos" data-proj="${k}">Ver ${esc(p.name)}${ui('arrow')}</button>`)); }
+    const txt = parts.length ? 'La he usado ' + list(parts) + '.' : 'El CV no la asocia a un empleo ni a un proyecto concretos.';
+    info.innerHTML = `<p><strong>${ic(t)}${esc(t)}</strong><span>${txt}</span></p><div class="acts">${acts.join('')}<button class="x" type="button" aria-label="Cerrar">${'<svg class="ui" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>'}</button></div>`;
+    info.hidden = false; also.hidden = true;
+  }
+  $('skills').addEventListener('click', e => { const b = e.target.closest('.pb'); if (b) showSkill(b.dataset.t); });
+  $('skinfo').addEventListener('click', e => { if (e.target.closest('.x')) showSkill(skSel); });
+
+  /* ---- experiencia ---- */
+  let job = -1;
+  function showJob(k) {
+    if (k === job) return;
+    job = k;
+    const j = jobs[k], d = $('detail');
+    $('jobs').querySelectorAll('.tj:not(.ms)').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.job === k)));
+    d.innerHTML = `<div class="xh"><div class="who"><div><div class="ttl"><h3>${esc(j.role)}</h3><span class="dur">${dur(j.when)}</span></div><p class="co">${esc(j.co)}, ${esc(j.when.toLowerCase())}</p></div></div>${tags(j.tags)}</div>
+      <div class="groups" data-n="${j.groups.length}">${j.groups.map(g => `<section class="grp"><h4>${ui(g.icon)}${esc(g.t)}</h4><ul>${g.items.map(i => `<li>${esc(i)}</li>`).join('')}</ul></section>`).join('')}</div>`;
+    d.classList.remove('swap'); void d.offsetWidth; d.classList.add('swap');
+  }
+  // en móvil el detalle queda debajo del recorrido: al elegir un empleo, se desplaza hasta él
+  $('jobs').addEventListener('click', e => { const b = e.target.closest('.tj:not(.ms)'); if (!b) return; showJob(+b.dataset.job); if (matchMedia('(max-width:820px)').matches) $('detail').scrollIntoView({behavior: 'smooth', block: 'start'}); });
+
+  // luz que sigue al cursor por las celdas de Experiencia y Habilidades (solo con ratón)
+  if (matchMedia('(hover:hover)').matches)
+    for (const [box, sel] of [[$('detail'), '.grp']])
+      box.addEventListener('pointermove', e => {
+        for (const c of box.querySelectorAll(sel)) {
+          const r = c.getBoundingClientRect();
+          c.style.setProperty('--x', e.clientX - r.left + 'px');
+          c.style.setProperty('--y', e.clientY - r.top + 'px');
+        }
+      });
+  showJob(0);
+
+  /* ---- escenario: seis diapositivas ---- */
+  const slides = [...document.querySelectorAll('.slide')];
+  const ids = slides.map(s => s.id);
+  const tabs = [...document.querySelectorAll('.tab')];
+  const names = tabs.map(t => t.textContent);
+  $('segs').innerHTML = names.map((n, k) => `<li><button class="seg" type="button" data-i="${k}" aria-label="${esc(n)}"></button></li>`).join('');
+  const segs = [...document.querySelectorAll('.seg')];
+  let cur = -1;
+
+  function placeInd() {
+    const t = tabs[cur]; if (!t) return;
+    $('ind').style.width = t.offsetWidth + 'px';
+    $('ind').style.transform = `translateX(${t.offsetLeft}px)`;
+    const nav = $('tabs');
+    if (nav.scrollWidth > nav.clientWidth) nav.scrollTo({left: t.offsetLeft - (nav.clientWidth - t.offsetWidth) / 2, behavior: 'smooth'});
+  }
+  function go(i, opts = {}) {
+    i = Math.max(0, Math.min(slides.length - 1, i));
+    if (i === cur && !opts.force) return;
+    cur = i;
+    $('track').style.setProperty('--cur', i);
+    document.querySelector('.app').style.setProperty('--cur', i);
+    slides.forEach((s, k) => { s.inert = k !== i; s.classList.toggle('on', k === i); });
+    tabs.forEach((t, k) => t.setAttribute('aria-current', String(k === i)));
+    segs.forEach((b, k) => b.setAttribute('aria-current', String(k === i)));
+    $('where').textContent = names[i];
+    $('count').textContent = `${i + 1} de ${slides.length}`;
+    $('prev').disabled = i === 0;
+    $('next').disabled = i === slides.length - 1;
+    slides[i].scrollTop = 0;
+    placeInd();
+    history.replaceState(null, '', i ? '#' + ids[i] : location.pathname + location.search);
+  }
+
+  document.addEventListener('click', e => {
+    const st = e.target.closest('[data-go]');
+    if (st) { go(ids.indexOf(st.dataset.go)); if (st.dataset.job != null) showJob(+st.dataset.job); if (st.dataset.proj != null) showProj(+st.dataset.proj); return; }
+    const sg = e.target.closest('.seg');
+    if (sg) { go(+sg.dataset.i); return; }
+    const a = e.target.closest('a[href^="#"]');
+    if (a && ids.includes(a.hash.slice(1))) { e.preventDefault(); go(ids.indexOf(a.hash.slice(1))); }
+  });
+  $('prev').addEventListener('click', () => go(cur - 1));
+  $('next').addEventListener('click', () => go(cur + 1));
+
+  document.addEventListener('keydown', e => {
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    if (e.key === 'ArrowRight') { e.preventDefault(); go(cur + 1); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(cur - 1); }
+    else if (/^[1-6]$/.test(e.key)) go(+e.key - 1);
+  });
+
+  // rueda y trackpad: cambian de sección solo si la diapositiva no tiene más que desplazar
+  let lock = 0;
+  const step = dir => { const now = Date.now(); if (now < lock) return; lock = now + 900; go(cur + dir); };
+  $('stage').addEventListener('wheel', e => {
+    const dx = e.deltaX, dy = e.deltaY;
+    if (Math.abs(dx) > Math.abs(dy)) { if (Math.abs(dx) > 25) { e.preventDefault(); step(dx > 0 ? 1 : -1); } return; }
+    const s = slides[cur];
+    const canScroll = s.scrollHeight > s.clientHeight + 2;
+    const atEdge = dy > 0 ? s.scrollTop + s.clientHeight >= s.scrollHeight - 2 : s.scrollTop <= 0;
+    if ((!canScroll || atEdge) && Math.abs(dy) > 25) step(dy > 0 ? 1 : -1);
+  }, {passive: false});
+
+  // swipe horizontal
+  let tx = null, ty = null;
+  $('stage').addEventListener('touchstart', e => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, {passive: true});
+  $('stage').addEventListener('touchend', e => {
+    if (tx == null) return;
+    const dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) step(dx < 0 ? 1 : -1);
+    tx = ty = null;
+  });
+
+  window.addEventListener('hashchange', () => { const k = ids.indexOf(location.hash.slice(1)); if (k >= 0) go(k); });
+  window.addEventListener('resize', placeInd);
+  document.fonts?.ready.then(placeInd);
+  go(Math.max(0, ids.indexOf(location.hash.slice(1))), {force: true});
+
+  /* ---- tema: sigue al sistema; el botón lo fija ---- */
+  const root = document.documentElement, meta = document.querySelector('meta[name=theme-color]');
+  const sys = matchMedia('(prefers-color-scheme: dark)');
+  const effective = () => root.dataset.theme || (sys.matches ? 'dark' : 'light');
+  const paint = () => { meta.content = effective() === 'dark' ? '#0C0E14' : '#F5F6F8'; };
+  try { const t = localStorage.getItem('theme'); if (t === 'light' || t === 'dark') root.dataset.theme = t; } catch {}
+  paint();
+  sys.addEventListener('change', paint);
+  $('theme').addEventListener('click', () => {
+    const t = effective() === 'dark' ? 'light' : 'dark';
+    root.dataset.theme = t; paint();
+    try { localStorage.setItem('theme', t); } catch {}
+  });
+}
+</script>
+</body>
+</html>

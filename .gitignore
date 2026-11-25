@@ -1,0 +1,16 @@
+# Documentación interna del proyecto (solo en local)
+CLAUDE.md
+PLAN.md
+PRODUCT.md
+DESIGN.md
+.claude/
+
+# El CV se publicará cuando haya una versión sin teléfono
+cv.pdf
+
+# Imagen antigua sin uso
+img/portfolio.png
+
+# Sistema
+.DS_Store
+Thumbs.db
