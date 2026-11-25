@@ -437,7 +437,9 @@ dl div:not(.lg) dd{margin-top:4px;text-wrap:balance;font-size:clamp(20px,min(1.7
 .tj.ms{padding-block:8px}
 .tj.ms .dot{width:12px;height:12px;margin:4px 0 0 4px;border-width:2px;border-color:var(--line)}
 .tj.ms strong{font-size:15px;font-stretch:100%;color:var(--muted)}
-.tj.ms .co{margin-top:2px;font-size:13px}
+.tj.ms .co{margin-top:4px;font-size:13px}
+.tj .co .logo.edu{width:22px;height:22px;border-radius:6px;background:#fff}
+.tj .co .logo.edu img{object-fit:contain;padding:2px}
 .tj.ms:hover strong{color:var(--ink)}
 .tl li:first-child .tj[aria-pressed]::after{content:attr(data-now);position:absolute;right:0;top:12px;font-size:11.5px;font-weight:600;color:var(--ok)}
 .xpw .detail .xh{grid-template-columns:minmax(0,1fr)}
@@ -469,24 +471,28 @@ dl div:not(.lg) dd{margin-top:4px;text-wrap:balance;font-size:clamp(20px,min(1.7
 .hub{position:relative;z-index:1;display:grid;place-items:center;padding-block:20px}
 /* orbe: una esfera violeta con brillo en el centro; alrededor, la órbita (una pista fina con una estela que gira)
    y las seis tecnologías base sobre ella */
-.sys{position:relative;width:var(--hw);aspect-ratio:1;display:grid;place-items:center}
+.sys{position:relative;width:var(--hw);aspect-ratio:1;display:grid;place-items:center;touch-action:none;cursor:grab;-webkit-tap-highlight-color:transparent;user-select:none}
+.sys.dragging{cursor:grabbing}
 .orbit{position:absolute;inset:0;border-radius:50%;border:1px solid color-mix(in srgb,var(--accent) 22%,transparent)}
 .orbit::before{content:"";position:absolute;inset:-1px;border-radius:50%;
   background:conic-gradient(from 0deg,transparent 0 62%,color-mix(in srgb,var(--accent) 85%,transparent) 100%);
   -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 2.5px),#000 calc(100% - 2px));mask:radial-gradient(farthest-side,transparent calc(100% - 2.5px),#000 calc(100% - 2px));
-  animation:orbit 60s linear infinite}
+  transform:rotate(var(--rot,0deg))}
 .orbit::after{content:"";position:absolute;inset:10%;border-radius:50%;border:1px dashed color-mix(in srgb,var(--accent) 18%,transparent)}
-.orb{position:relative;width:64%;aspect-ratio:1;border-radius:50%;display:grid;place-content:center;justify-items:center;gap:calc(var(--hw) * .015);text-align:center;color:#fff;
-  background:radial-gradient(circle at 32% 26%,color-mix(in srgb,var(--accent) 45%,#fff) 0,var(--accent) 48%,color-mix(in srgb,var(--accent) 62%,#0F1222) 100%);
+$1  transform:perspective(700px) rotateX(var(--ty,0deg)) rotateY(var(--tx,0deg));transition:transform .5s var(--ease);
+  background:radial-gradient(circle at var(--hx,32%) var(--hy,26%),color-mix(in srgb,var(--accent) 45%,#fff) 0,var(--accent) 48%,color-mix(in srgb,var(--accent) 62%,#0F1222) 100%);
   box-shadow:inset -12px -16px 34px rgba(15,18,34,.32),inset 10px 12px 26px rgba(255,255,255,.22),0 22px 50px -20px var(--accent),0 0 0 10px var(--accent-soft)}
 .orb .k{font-size:calc(var(--hw) * .046);font-weight:500;color:rgba(255,255,255,.82)}
 .orb strong{font-size:calc(var(--hw) * .1);font-weight:600;font-stretch:80%;letter-spacing:-.02em;line-height:1;color:#fff;text-shadow:0 1px 8px rgba(15,18,34,.25)}
-.core{position:absolute;inset:0;list-style:none;margin:0;padding:0;animation:orbit 60s linear infinite}
+.orb::after{content:"";position:absolute;inset:0;border-radius:50%;pointer-events:none;opacity:0}
+.orb.pulse::after{animation:pulse .8s var(--ease)}
+@keyframes pulse{from{opacity:1;box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 55%,transparent)}to{opacity:0;box-shadow:0 0 0 40px color-mix(in srgb,var(--accent) 0%,transparent)}}
+.core .pb[aria-pressed=true] .ti{transform:scale(1.15)}
+.core{position:absolute;inset:0;list-style:none;margin:0;padding:0;transform:rotate(var(--rot,0deg))}
 .core li{position:absolute;left:50%;top:50%;width:0;height:0;transform:rotate(var(--a)) translateX(calc(var(--hw) / 2)) rotate(calc(var(--a) * -1))}
 .core .pb{all:unset;position:absolute;left:-20px;top:-20px;display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:light-dark(#fff,#1A1E2C);cursor:pointer;
-  box-shadow:0 0 0 1px var(--glass-edge),0 6px 16px -8px light-dark(rgba(30,20,90,.35),rgba(0,0,0,.8));animation:orbit 60s linear infinite reverse;transition:box-shadow .25s}
+  box-shadow:0 0 0 1px var(--glass-edge),0 6px 16px -8px light-dark(rgba(30,20,90,.35),rgba(0,0,0,.8));transform:rotate(calc(var(--rot,0deg) * -1));transition:box-shadow .25s}
 .core .pb:hover{box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 50%,transparent),0 6px 16px -6px var(--accent)}
-.sys:hover .core,.sys:hover .core .pb,.sys:hover .orbit::before,.core:focus-within,.core:focus-within .pb{animation-play-state:paused}
 @keyframes orbit{to{transform:rotate(1turn)}}
 .core .pb:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .core .pb[aria-pressed=true]{box-shadow:0 0 0 2px var(--accent),0 6px 16px -6px var(--accent)}
@@ -1043,8 +1049,8 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
 
   /* ---- datos (mismo contenido que el CV) ---- */
   const career = [
-    {when:'2019', what:'Bootcamp Java & SQL', where:'Fundación Esplai', go:'sobre-mi'},
-    {when:'2021 – 2023', what:{es:'CFGS Desarrollo de Aplicaciones Web', ca:"CFGS Desenvolupament d'Aplicacions Web", en:'Higher VET Diploma in Web Application Development'}, where:'Ins Provençana', go:'sobre-mi'},
+    {when:'2019', what:'Bootcamp Java & SQL', where:'Fundación Esplai', go:'sobre-mi', logo:'img/esplai.png'},
+    {when:'2021 – 2023', what:{es:'CFGS Desarrollo de Aplicaciones Web', ca:"CFGS Desenvolupament d'Aplicacions Web", en:'Higher VET Diploma in Web Application Development'}, where:'Ins Provençana', go:'sobre-mi', logo:'img/provencana.jpg'},
     {when:'09/2023', what:'Full Stack Developer', where:'Soficat Xerox', go:'experiencia', job:1},
     {when:'12/2023', what:'Backend Developer', where:'Raona', go:'experiencia', job:0},
     {when:'today', what:'nowRole', where:'open', go:'contacto', now:true}
@@ -1218,7 +1224,7 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
         <span class="dot" aria-hidden="true"></span><b>${esc(fmtWhen(j.when))}</b><strong>${esc(j.role)}</strong>
         <span class="co">${logo(j)}${esc(j.short)}<i>${dur(j.when)}</i></span></button></li>`).join('')
       + career.filter(c => c.go === 'sobre-mi').map(c =>
-      `<li><button class="tj ms" type="button" data-go="sobre-mi"><span class="dot" aria-hidden="true"></span><b>${esc(c.when)}</b><strong>${esc(tx(c.what))}</strong><span class="co">${esc(c.where)}</span></button></li>`).reverse().join('');
+      `<li><button class="tj ms" type="button" data-go="sobre-mi"><span class="dot" aria-hidden="true"></span><b>${esc(c.when)}</b><strong>${esc(tx(c.what))}</strong><span class="co"><span class="logo edu"><img src="${c.logo}" alt="${esc(L().logo)} ${esc(c.where)}" width="24" height="24"></span>${esc(c.where)}</span></button></li>`).reverse().join('');
   }
 
   // mapa: el stack principal en el centro y los seis grupos a los lados, unidos a él
@@ -1279,6 +1285,7 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
   $('langviz').addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('li[data-i]')) { e.preventDefault(); e.target.click(); } });
   $('langviz').addEventListener('pointerover', e => { if (e.pointerType !== 'mouse') return; const li = e.target.closest('li[data-i]'); lightRing(li ? li.dataset.i : langSel); });
   $('langviz').addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') lightRing(langSel); });
+  document.addEventListener('click', e => { if (langSel != null && !e.target.closest('#langviz li')) { langSel = null; lightRing(null); } });
 
   /* ---- habilidades: filtro por empleo o proyectos ---- */
   let filter = '';
@@ -1320,6 +1327,69 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
   }
   $('skills').addEventListener('click', e => { const b = e.target.closest('.pb'); if (b) showSkill(b.dataset.t); });
   $('skinfo').addEventListener('click', e => { if (e.target.closest('.x')) showSkill(skSel); });
+  // pulsar fuera de la ficha (y fuera de las tecnologías) la cierra
+  document.addEventListener('click', e => { if (skSel && !e.target.closest('#skinfo, .pb, .sys')) showSkill(skSel); });
+
+  /* ---- órbita del stack principal ----
+     Gira sola (una vuelta por minuto), se detiene al pasar el ratón, se puede arrastrar como un dial (con inercia),
+     y al elegir una de sus tecnologías la lleva arriba. Tocar el orbe emite una onda y le da un impulso. */
+  const still = matchMedia('(prefers-reduced-motion: reduce)');
+  const BASE = 6;
+  let rot = 0, vel = BASE, target = null, hovering = false, drag = null, tLast = performance.now();
+  const norm = d => ((d % 360) + 540) % 360 - 180;
+  const centre = sys => { const r = sys.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };
+  const angleAt = (sys, e) => { const [cx, cy] = centre(sys); return Math.atan2(e.clientY - cy, e.clientX - cx) * 180 / Math.PI; };
+  function spin(now) {
+    const dt = Math.min(.05, (now - tLast) / 1000); tLast = now;
+    const sys = document.querySelector('.sys');
+    if (sys && !document.hidden && !drag) {
+      if (target != null) { const d = norm(target - rot); rot += still.matches ? d : d * Math.min(1, dt * 5); vel = 0; }
+      else { const want = hovering || still.matches ? 0 : BASE; vel += (want - vel) * Math.min(1, dt * (Math.abs(vel) > 40 ? 1.2 : 3)); rot += vel * dt; }
+      sys.style.setProperty('--rot', rot + 'deg');
+    }
+    requestAnimationFrame(spin);
+  }
+  requestAnimationFrame(spin);
+  // llevar arriba la tecnología del núcleo elegida
+  const coreTarget = () => { const k = core.indexOf(skSel); target = k < 0 ? null : rot + norm(-k * 360 / core.length - rot); };
+  const showSkill0 = showSkill;
+  showSkill = (t, toggle) => { showSkill0(t, toggle); coreTarget(); };
+  const sk = $('skills');
+  sk.addEventListener('pointerover', e => { if (e.pointerType === 'mouse' && e.target.closest('.sys')) hovering = true; });
+  sk.addEventListener('pointerout', e => { if (e.pointerType === 'mouse' && e.target.closest('.sys') && !e.relatedTarget?.closest?.('.sys')) { hovering = false; const o = sk.querySelector('.orb'); o && (o.style.cssText = ''); } });
+  sk.addEventListener('pointermove', e => {
+    const sys = e.target.closest('.sys'); if (!sys) return;
+    if (drag) {
+      const a = angleAt(sys, e), d = norm(a - drag.a), now = performance.now();
+      rot += d; drag.a = a; drag.moved += Math.abs(d);
+      drag.v = d / Math.max(.008, (now - drag.t) / 1000); drag.t = now;
+      sys.style.setProperty('--rot', rot + 'deg');
+    } else if (e.pointerType === 'mouse') {
+      const o = sys.querySelector('.orb'), r = o.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+      o.style.setProperty('--tx', (x * 16).toFixed(1) + 'deg'); o.style.setProperty('--ty', (-y * 16).toFixed(1) + 'deg');
+      o.style.setProperty('--hx', (32 + x * 40).toFixed(0) + '%'); o.style.setProperty('--hy', (26 + y * 40).toFixed(0) + '%');
+    }
+  });
+  sk.addEventListener('pointerdown', e => {
+    const sys = e.target.closest('.sys'); if (!sys || e.target.closest('.pb')) return;
+    drag = {a: angleAt(sys, e), t: performance.now(), v: 0, moved: 0, id: e.pointerId, onOrb: !!e.target.closest('.orb')};
+    target = null; sys.classList.add('dragging'); try { sys.setPointerCapture(e.pointerId); } catch {}
+  });
+  const endDrag = e => {
+    if (!drag || e.pointerId !== drag.id) return;
+    const sys = sk.querySelector('.sys'); sys?.classList.remove('dragging');
+    if (drag.moved < 4) {
+      // toque sin arrastre: onda y un impulso de giro
+      const o = sys?.querySelector('.orb'); if (o && drag.onOrb) { o.classList.remove('pulse'); void o.offsetWidth; o.classList.add('pulse'); }
+      if (drag.onOrb && !still.matches) vel = 220;
+    } else vel = Math.max(-720, Math.min(720, drag.v));
+    drag = null;
+  };
+  sk.addEventListener('pointerup', endDrag);
+  sk.addEventListener('pointercancel', endDrag);
+  // el arrastre del orbe no debe cambiar de sección (swipe del escenario)
+  for (const t of ['touchstart', 'touchend']) sk.addEventListener(t, e => { if (e.target.closest('.sys')) e.stopPropagation(); }, {passive: true});
 
   /* ---- experiencia ---- */
   let job = -1;
