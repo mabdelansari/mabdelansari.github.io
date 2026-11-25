@@ -476,26 +476,23 @@ dl div:not(.lg) dd{margin-top:4px;text-wrap:balance;font-size:clamp(20px,min(1.7
    y las seis tecnologías base sobre ella */
 .sys{position:relative;width:var(--hw);aspect-ratio:1;display:grid;place-items:center;touch-action:none;cursor:grab;-webkit-tap-highlight-color:transparent;user-select:none}
 .sys.dragging{cursor:grabbing}
-.orbit{position:absolute;inset:0;border-radius:50%;border:1px solid color-mix(in srgb,var(--accent) 22%,transparent)}
-.orbit::before{content:"";position:absolute;inset:-1px;border-radius:50%;
-  background:conic-gradient(from 0deg,transparent 0 62%,color-mix(in srgb,var(--accent) 85%,transparent) 100%);
-  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 2.5px),#000 calc(100% - 2px));mask:radial-gradient(farthest-side,transparent calc(100% - 2.5px),#000 calc(100% - 2px));
-  transform:rotate(var(--rot,0deg))}
-.orbit::after{content:"";position:absolute;inset:10%;border-radius:50%;border:1px dashed color-mix(in srgb,var(--accent) 18%,transparent)}
-/* el núcleo es un planeta: esfera violeta con bandas que se desplazan despacio, brillo que sigue al puntero y atmósfera */
-.orb{position:relative;isolation:isolate;width:64%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;text-align:center;color:#fff;
+.orbit{position:absolute;inset:0;border-radius:50%;border:1.5px solid color-mix(in srgb,var(--accent) 38%,transparent)}
+/* el centro es un átomo: un núcleo que late y desprende energía, tres órbitas de electrones y ondas que se expanden */
+.atom{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.atom .shell{fill:none;stroke:color-mix(in srgb,var(--accent) 55%,transparent);stroke-width:1.1}
+.atom .e{fill:var(--accent);stroke:light-dark(#fff,#0C0E14);stroke-width:1.4;filter:drop-shadow(0 0 4px var(--accent))}
+.atom .wave{fill:none;stroke:var(--accent);stroke-width:1}
+.orb{position:relative;isolation:isolate;width:48%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;text-align:center;color:#fff;
   transform:perspective(700px) rotateX(var(--ty,0deg)) rotateY(var(--tx,0deg));transition:transform .5s var(--ease);
-  background:radial-gradient(circle at var(--hx,30%) var(--hy,24%),rgba(255,255,255,.5) 0,rgba(255,255,255,0) 40%),
-    radial-gradient(circle at 36% 30%,color-mix(in srgb,var(--accent) 62%,#fff) 0,var(--accent) 46%,color-mix(in srgb,var(--accent) 52%,#0B0A1E) 100%);
-  box-shadow:inset -20px -24px 44px rgba(10,8,30,.5),inset 8px 10px 22px rgba(255,255,255,.18),
-    0 0 0 1px rgba(255,255,255,.08),0 0 34px 6px color-mix(in srgb,var(--accent) 32%,transparent),0 26px 52px -20px var(--accent)}
-/* bandas del planeta */
-.orb::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:50%;opacity:.55;
-  background:repeating-linear-gradient(-16deg,transparent 0 14px,rgba(255,255,255,.09) 14px 20px,transparent 20px 34px,rgba(10,8,30,.14) 34px 44px);
-  background-size:200% 200%;animation:bands 40s linear infinite;
-  -webkit-mask:radial-gradient(circle at 38% 34%,#000 40%,transparent 72%);mask:radial-gradient(circle at 38% 34%,#000 40%,transparent 72%)}
-@keyframes bands{to{background-position:200% 0}}
-.orb strong{position:relative;font-size:calc(var(--hw) * .1);font-weight:600;font-stretch:80%;letter-spacing:-.02em;line-height:1;color:#fff;text-shadow:0 2px 10px rgba(10,8,30,.45)}
+  background:radial-gradient(circle at var(--hx,32%) var(--hy,26%),rgba(255,255,255,.55) 0,rgba(255,255,255,0) 42%),
+    radial-gradient(circle at 40% 36%,color-mix(in srgb,var(--accent) 60%,#fff) 0,var(--accent) 50%,color-mix(in srgb,var(--accent) 55%,#0B0A1E) 100%);
+  box-shadow:inset -12px -14px 28px rgba(10,8,30,.42),inset 6px 8px 18px rgba(255,255,255,.2),0 0 0 1px rgba(255,255,255,.1)}
+/* energía: un halo que late detrás del núcleo */
+.orb::before{content:"";position:absolute;inset:-34%;z-index:-1;border-radius:50%;pointer-events:none;
+  background:radial-gradient(closest-side,color-mix(in srgb,var(--accent) 55%,transparent),color-mix(in srgb,var(--accent) 18%,transparent) 55%,transparent);
+  animation:energy 2.6s ease-in-out infinite}
+@keyframes energy{0%,100%{opacity:.55;transform:scale(.88)}50%{opacity:1;transform:scale(1.06)}}
+.orb strong{position:relative;font-size:calc(var(--hw) * .074);font-weight:600;font-stretch:80%;letter-spacing:-.02em;line-height:1;color:#fff;text-shadow:0 1px 8px rgba(10,8,30,.45)}
 /* «Stack principal» debajo del sistema, en pequeño */
 .hub .k{display:block;margin-top:30px;font-size:12px;font-weight:500;color:var(--muted);letter-spacing:.01em}
 .orb::after{content:"";position:absolute;inset:0;border-radius:50%;pointer-events:none;opacity:0}
@@ -1247,9 +1244,10 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
     const group = s => `<section class="sg"><header>${ui(s.icon)}<h3>${esc(tx(s.name))}</h3></header>
       <ul class="pills">${s.items.map(i => `<li data-u="${where(i)}"><button class="pb" type="button" aria-pressed="false" data-t="${esc(i)}">${ic(i)}${esc(tn(i))}</button></li>`).join('')}</ul></section>`;
     $('skills').innerHTML = `<div class="skcol l">${[0, 2, 3].map(k => group(skills[k])).join('')}</div>
-      <div class="hub"><div class="sys"><div class="orbit" aria-hidden="true"></div><div class="orb"><strong>${esc(L().coreName)}</strong></div>
+      <div class="hub"><div class="sys"><div class="orbit" aria-hidden="true"></div><svg class="atom" viewBox="-100 -100 200 200" aria-hidden="true">${[0, 1, 2].map(i => `<circle class="wave" r="26" opacity="0"><animate attributeName="r" values="26;98" dur="3.6s" begin="${i * 1.2}s" repeatCount="indefinite"/><animate attributeName="opacity" values=".6;0" dur="3.6s" begin="${i * 1.2}s" repeatCount="indefinite"/></circle>`).join('')}${[0, 60, 120].map((a, i) => `<g transform="rotate(${a})"><ellipse class="shell" rx="84" ry="27"/><circle class="e" r="3.6"><animateMotion dur="${(2.6 + i * .9).toFixed(1)}s" repeatCount="indefinite" path="M84,0 A84,27 0 1,1 -84,0 A84,27 0 1,1 84,0"/></circle></g>`).join('')}</svg><div class="orb"><strong>${esc(L().coreName)}</strong></div>
         <ul class="core">${core.map((i, k) => `<li style="--a:${k * 360 / core.length - 90}deg"><button class="pb" type="button" aria-pressed="false" data-t="${esc(i)}" title="${esc(i)}" aria-label="${esc(i)}">${ic(i)}</button></li>`).join('')}</ul></div><span class="k">${esc(L().core)}</span></div>
       <div class="skcol r">${[1, 4, 5].map(k => group(skills[k])).join('')}</div>`;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) $('skills').querySelector('.atom')?.pauseAnimations();
   }
 
   // índice: los nombres en grande son el selector; a la derecha, las ventanas de los tres proyectos apiladas
