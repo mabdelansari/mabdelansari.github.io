@@ -324,6 +324,7 @@ dd{margin:2px 0 0;font-weight:600;line-height:1.3}
 .skfoot{margin-top:clamp(14px,2.6vh,28px);min-height:44px;display:grid;align-items:center}
 .skfoot .also{margin:0}
 .hint-sk{color:var(--muted);margin-left:6px}
+.skinfo[hidden]{display:none}
 .skinfo{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 24px;animation:rise .4s var(--ease) both}
 .skinfo p{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin:0;font-size:15px;color:var(--muted)}
 .skinfo strong{display:inline-flex;align-items:center;gap:8px;font-size:17px;font-weight:600;color:var(--ink)}
@@ -453,7 +454,7 @@ dl div:not(.lg) dd{margin-top:4px;text-wrap:balance;font-size:clamp(20px,min(1.7
 
 /* ---------- habilidades: mapa alrededor del stack principal ----------
    Una columna vertebral violeta en el centro con el stack principal en un orbe; cada grupo se une a ella con un trazo. */
-#skills{overflow:visible;--hw:clamp(190px,16vw,226px);--g:clamp(28px,3.4vw,56px);position:relative;display:grid;grid-template-columns:minmax(0,1fr) var(--hw) minmax(0,1fr);gap:0 var(--g);align-items:center;margin-inline:0}
+#skills{overflow:visible;--hw:clamp(230px,18vw,256px);--g:clamp(28px,3.4vw,56px);position:relative;display:grid;grid-template-columns:minmax(0,1fr) var(--hw) minmax(0,1fr);gap:0 var(--g);align-items:center;margin-inline:0}
 #skills::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:linear-gradient(transparent,var(--accent) 22% 78%,transparent);opacity:.45}
 .skcol{display:grid;gap:clamp(14px,2.6vh,26px)}
 #skills .sg{padding:0;border:0;background:none;overflow:visible}
@@ -466,21 +467,26 @@ dl div:not(.lg) dd{margin-top:4px;text-wrap:balance;font-size:clamp(20px,min(1.7
 .skcol.l .sg header .ui{order:2}
 #skills .sg:hover::after{background:var(--accent)}
 .hub{position:relative;z-index:1;display:grid;place-items:center;padding-block:20px}
-/* orbe: un disco suave con dos órbitas finas; las cuatro tecnologías base giran sobre la órbita exterior */
-.orb{position:relative;width:var(--hw);aspect-ratio:1;border-radius:50%;display:grid;place-content:center;justify-items:center;gap:4px;text-align:center;color:var(--ink);
-  background:radial-gradient(circle,color-mix(in srgb,var(--accent) 13%,var(--bg)) 0 44%,color-mix(in srgb,var(--accent) 5%,transparent) 45% 70%,transparent 71%)}
-.orb::before,.orb::after{content:"";position:absolute;border-radius:50%;pointer-events:none}
-.orb::before{inset:0;border:1px dashed color-mix(in srgb,var(--accent) 45%,transparent)}
-.orb::after{inset:20%;border:1px solid color-mix(in srgb,var(--accent) 22%,transparent)}
-.orb .k{position:relative;font-size:11.5px;font-weight:500;color:var(--muted)}
-.orb strong{position:relative;font-size:clamp(24px,2.1vw,30px);font-weight:600;font-stretch:80%;letter-spacing:-.02em;line-height:1;color:var(--accent)}
-/* la órbita gira despacio y cada icono contrarrota para quedarse derecho; se para al señalarla y con movimiento reducido */
+/* orbe: una esfera violeta con brillo en el centro; alrededor, la órbita (una pista fina con una estela que gira)
+   y las seis tecnologías base sobre ella */
+.sys{position:relative;width:var(--hw);aspect-ratio:1;display:grid;place-items:center}
+.orbit{position:absolute;inset:0;border-radius:50%;border:1px solid color-mix(in srgb,var(--accent) 22%,transparent)}
+.orbit::before{content:"";position:absolute;inset:-1px;border-radius:50%;
+  background:conic-gradient(from 0deg,transparent 0 62%,color-mix(in srgb,var(--accent) 85%,transparent) 100%);
+  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 2.5px),#000 calc(100% - 2px));mask:radial-gradient(farthest-side,transparent calc(100% - 2.5px),#000 calc(100% - 2px));
+  animation:orbit 60s linear infinite}
+.orbit::after{content:"";position:absolute;inset:10%;border-radius:50%;border:1px dashed color-mix(in srgb,var(--accent) 18%,transparent)}
+.orb{position:relative;width:64%;aspect-ratio:1;border-radius:50%;display:grid;place-content:center;justify-items:center;gap:calc(var(--hw) * .015);text-align:center;color:#fff;
+  background:radial-gradient(circle at 32% 26%,color-mix(in srgb,var(--accent) 45%,#fff) 0,var(--accent) 48%,color-mix(in srgb,var(--accent) 62%,#0F1222) 100%);
+  box-shadow:inset -12px -16px 34px rgba(15,18,34,.32),inset 10px 12px 26px rgba(255,255,255,.22),0 22px 50px -20px var(--accent),0 0 0 10px var(--accent-soft)}
+.orb .k{font-size:calc(var(--hw) * .046);font-weight:500;color:rgba(255,255,255,.82)}
+.orb strong{font-size:calc(var(--hw) * .1);font-weight:600;font-stretch:80%;letter-spacing:-.02em;line-height:1;color:#fff;text-shadow:0 1px 8px rgba(15,18,34,.25)}
 .core{position:absolute;inset:0;list-style:none;margin:0;padding:0;animation:orbit 60s linear infinite}
 .core li{position:absolute;left:50%;top:50%;width:0;height:0;transform:rotate(var(--a)) translateX(calc(var(--hw) / 2)) rotate(calc(var(--a) * -1))}
 .core .pb{all:unset;position:absolute;left:-20px;top:-20px;display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:light-dark(#fff,#1A1E2C);cursor:pointer;
   box-shadow:0 0 0 1px var(--glass-edge),0 6px 16px -8px light-dark(rgba(30,20,90,.35),rgba(0,0,0,.8));animation:orbit 60s linear infinite reverse;transition:box-shadow .25s}
 .core .pb:hover{box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 50%,transparent),0 6px 16px -6px var(--accent)}
-.orb:hover .core,.orb:hover .core .pb,.core:focus-within,.core:focus-within .pb{animation-play-state:paused}
+.sys:hover .core,.sys:hover .core .pb,.sys:hover .orbit::before,.core:focus-within,.core:focus-within .pb{animation-play-state:paused}
 @keyframes orbit{to{transform:rotate(1turn)}}
 .core .pb:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .core .pb[aria-pressed=true]{box-shadow:0 0 0 2px var(--accent),0 6px 16px -6px var(--accent)}
@@ -502,7 +508,7 @@ dl div:not(.lg) dd{margin-top:4px;text-wrap:balance;font-size:clamp(20px,min(1.7
 .lgd h3{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600;margin-bottom:8px}
 .lgd h3 .ui,.cl .ui{color:var(--accent)}
 .lgd ul{list-style:none;margin:0;padding:0}
-.lgd li{display:grid;grid-template-columns:12px minmax(0,1fr) auto;align-items:center;gap:12px;padding:7px 0;border-top:1px solid var(--line);border-radius:4px;cursor:default;transition:opacity .3s}
+.lgd li{-webkit-tap-highlight-color:transparent;user-select:none;display:grid;grid-template-columns:12px minmax(0,1fr) auto;align-items:center;gap:12px;padding:7px 0;border-top:1px solid var(--line);border-radius:4px;cursor:pointer;transition:opacity .3s}
 .lgd li:last-child{border-bottom:1px solid var(--line)}
 .lgd li i{width:12px;height:12px;border-radius:50%;background:var(--c)}
 .lgd li strong{font-weight:600;font-size:15px}
@@ -594,7 +600,7 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
   .pinfo .tags{margin-top:10px}
   .pinfo .acts{margin-top:14px}
   .also{font-size:14px}
-  #skills{--hw:180px}
+  #skills{--hw:224px}
   /* en pantallas bajas la captura se recorta por abajo (siempre igual, sin zoom) para que la sección quepa */
   .list li{padding:6px 0}
   #sobre-mi dl{margin-bottom:16px}
@@ -716,6 +722,40 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
   .where span{display:none}
 }
 
+/* inicio en móvil */
+@media (max-width:820px){
+  .hero{grid-template-columns:auto minmax(0,1fr);column-gap:16px;row-gap:0;align-items:center}
+  .intro{display:contents}
+  .photo{grid-row:1;grid-column:1;width:84px;border-radius:20px}
+  .avail{grid-row:1;grid-column:2;align-self:center;margin:0;font-size:14px;line-height:1.35;align-items:flex-start}
+  .avail i{margin-top:5px;flex:none}
+  .hero h1,.hero .role,.hero .lead,.hero .btns,.hero .career,.hero .sr{grid-column:1 / -1}
+  .hero h1{margin-top:22px;font-size:clamp(38px,11vw,52px)}
+  .hero .btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:24px}
+  .hero .btns .btn{justify-content:center;padding-inline:12px}
+  .hero .btns .btn.main{grid-column:1 / -1}
+  .hero .career{margin-top:32px}
+  /* sobre mí: los tres datos en una fila */
+  .facts{grid-template-columns:repeat(3,auto);justify-content:start}
+  .facts div:nth-child(2),.facts div:nth-child(3){border-top:0;border-left:1px solid var(--line);padding-left:14px}
+  .facts div{padding-right:14px}
+  .facts div:not(.lg) dd{font-size:22px}
+  /* credenciales: lista de filas (logo, título y entidad) en vez de medallones centrados */
+  .creds{grid-template-columns:minmax(0,1fr);row-gap:0}
+  .cl.c{margin-top:22px}
+  .md{grid-template-columns:44px minmax(0,1fr);justify-items:start;align-items:center;column-gap:14px;row-gap:2px;text-align:left;padding:10px 0;border-bottom:1px solid var(--line)}
+  .md .mc{grid-row:1 / span 2;width:44px;height:44px;padding:8px}
+  .md strong,.md > span:last-child{grid-column:2;margin:0}
+  .md strong{font-size:14.5px}
+  .md > span:last-child{justify-content:flex-start;font-size:13px}
+  /* habilidades: filtro en una fila y tecnologías más ligeras */
+  .flt{display:grid;grid-template-columns:repeat(4,auto);justify-content:start;gap:6px 4px}
+  .flt .flt-l{grid-column:1 / -1;margin:0}
+  .fb{min-height:40px;padding:0 11px;font-size:13.5px;white-space:nowrap}
+  .pills{gap:6px}
+  .pills .pb{min-height:32px;padding:3px 10px}
+}
+
 @media (prefers-reduced-motion:reduce){
   .ring,.win{transition:none}
   *,*::before,*::after{animation:none!important;transition-duration:.01ms!important;transition-delay:0s!important}
@@ -799,7 +839,7 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
       <!-- Inicio -->
       <section class="slide" id="inicio" aria-label="Inicio" data-ka="t.inicio"><div class="wrap hero">
         <div class="intro">
-          <p class="avail in" style="--d:.05s"><i aria-hidden="true"></i><span data-k="avail">Abierto a nuevas oportunidades en Barcelona o en remoto</span></p>
+          <p class="avail in" style="--d:.05s"><i aria-hidden="true"></i><span data-k="avail">Abierto a nuevas oportunidades</span></p>
           <h1 class="in" style="--d:.15s">Mostafa Abdel&#8209;illah El Ansari</h1>
           <p class="role in" style="--d:.3s" data-k="role">Backend Developer .NET, C# y Azure</p>
           <p class="lead in" style="--d:.38s" data-k="lead">Desarrollo APIs REST y microservicios con C# y ASP.NET Core sobre Microsoft Azure. Más de 3 años construyendo, manteniendo y dando soporte a sistemas en producción.</p>
@@ -827,7 +867,7 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
             <p data-k="p2">Aplico SOLID, Clean Architecture y patrones de diseño, y uso herramientas de IA como Claude y OpenAI Codex para trabajar de forma más rápida y precisa.</p>
             <dl class="facts">
               <div><dt><svg class="ui" aria-hidden="true"><use href="#i-briefcase"/></svg><span data-k="f.xp">Experiencia</span></dt><dd data-k="f.xpv">+3 años</dd></div>
-              <div><dt><svg class="ui" aria-hidden="true"><use href="#i-code"/></svg><span data-k="f.sp">Especialidad</span></dt><dd data-k="f.spv">Backend .NET y Azure</dd></div>
+              <div><dt><svg class="ui" aria-hidden="true"><use href="#i-code"/></svg><span data-k="f.sp">Especialidad</span></dt><dd data-k="f.spv">Backend</dd></div>
               <div><dt><svg class="ui" aria-hidden="true"><use href="#i-pin"/></svg><span data-k="f.loc">Ubicación</span></dt><dd>Barcelona</dd></div>
             </dl>
           </div>
@@ -925,13 +965,13 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
       title: 'Mostafa Abdel-illah El Ansari', desc: 'Backend Developer .NET en Barcelona. APIs REST y microservicios con C#, ASP.NET Core y Microsoft Azure.',
       lang: 'Idioma', menu: 'Menú', brand: 'Mostafa Abdel-illah, ir al inicio', nav: 'Secciones', theme: 'Cambiar entre modo claro y oscuro', contact: 'Contactar',
       't.inicio': 'Inicio', 't.sobre': 'Sobre mí', 't.xp': 'Experiencia', 't.sk': 'Habilidades', 't.pj': 'Proyectos', 't.ct': 'Contacto',
-      avail: 'Abierto a nuevas oportunidades en Barcelona o en remoto', role: 'Backend Developer .NET, C# y Azure',
+      avail: 'Abierto a nuevas oportunidades', role: 'Backend Developer .NET, C# y Azure',
       lead: 'Desarrollo APIs REST y microservicios con C# y ASP.NET Core sobre Microsoft Azure. Más de 3 años construyendo, manteniendo y dando soporte a sistemas en producción.',
       cv: 'Ver CV', photo: 'Foto de Mostafa Abdel-illah El Ansari', 'cap.role': 'Backend Developer en Raona', 'cap.since': 'Desde diciembre de 2023', career: 'Trayectoria',
       big: 'Soy desarrollador backend especializado en el ecosistema .NET y Microsoft Azure. Me gusta el código mantenible, bien testeado y pensado para crecer.',
       p1: 'En Raona desarrollo funcionalidades de principio a fin: APIs y microservicios, procesos asíncronos con colas, almacenamiento en Azure y servicios de Windows para la transferencia de ficheros. También participo en el análisis y la estimación de tareas y en la resolución de incidencias en producción.',
       p2: 'Aplico SOLID, Clean Architecture y patrones de diseño, y uso herramientas de IA como Claude y OpenAI Codex para trabajar de forma más rápida y precisa.',
-      'f.xp': 'Experiencia', 'f.xpv': '+3 años', 'f.sp': 'Especialidad', 'f.spv': 'Backend .NET y Azure', 'f.loc': 'Ubicación',
+      'f.xp': 'Experiencia', 'f.xpv': '+3 años', 'f.sp': 'Especialidad', 'f.spv': 'Backend', 'f.loc': 'Ubicación',
       edu: 'Formación', certs: 'Certificaciones', cfgs: 'CFGS Desarrollo de Aplicaciones Web', 'cred.ms': 'Microsoft, ver credencial', 'cred.fcc': 'freeCodeCamp, ver credencial',
       langs: 'Idiomas', nlangs: 'idiomas',
       xpnav: 'Recorrido: elige un empleo', now: 'Ahora', present: 'Actualidad', today: 'Hoy', open: 'Abierto a oportunidades', nowRole: 'Backend .NET y Azure', logo: 'Logo de',
@@ -950,13 +990,13 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
       title: 'Mostafa Abdel-illah El Ansari', desc: 'Backend Developer .NET a Barcelona. APIs REST i microserveis amb C#, ASP.NET Core i Microsoft Azure.',
       lang: 'Idioma', menu: 'Menú', brand: "Mostafa Abdel-illah, anar a l'inici", nav: 'Seccions', theme: 'Canviar entre mode clar i fosc', contact: 'Contactar',
       't.inicio': 'Inici', 't.sobre': 'Sobre mi', 't.xp': 'Experiència', 't.sk': 'Habilitats', 't.pj': 'Projectes', 't.ct': 'Contacte',
-      avail: 'Obert a noves oportunitats a Barcelona o en remot', role: 'Backend Developer .NET, C# i Azure',
+      avail: 'Obert a noves oportunitats', role: 'Backend Developer .NET, C# i Azure',
       lead: 'Desenvolupo APIs REST i microserveis amb C# i ASP.NET Core sobre Microsoft Azure. Més de 3 anys construint, mantenint i donant suport a sistemes en producció.',
       cv: 'Veure el CV', photo: 'Foto de Mostafa Abdel-illah El Ansari', 'cap.role': 'Backend Developer a Raona', 'cap.since': 'Des de desembre de 2023', career: 'Trajectòria',
       big: "Soc desenvolupador backend especialitzat en l'ecosistema .NET i Microsoft Azure. M'agrada el codi mantenible, ben testejat i pensat per créixer.",
       p1: "A Raona desenvolupo funcionalitats de principi a fi: APIs i microserveis, processos asíncrons amb cues, emmagatzematge a Azure i serveis de Windows per a la transferència de fitxers. També participo en l'anàlisi i l'estimació de tasques i en la resolució d'incidències en producció.",
       p2: "Aplico SOLID, Clean Architecture i patrons de disseny, i faig servir eines d'IA com Claude i OpenAI Codex per treballar de manera més ràpida i precisa.",
-      'f.xp': 'Experiència', 'f.xpv': '+3 anys', 'f.sp': 'Especialitat', 'f.spv': 'Backend .NET i Azure', 'f.loc': 'Ubicació',
+      'f.xp': 'Experiència', 'f.xpv': '+3 anys', 'f.sp': 'Especialitat', 'f.spv': 'Backend', 'f.loc': 'Ubicació',
       edu: 'Formació', certs: 'Certificacions', cfgs: "CFGS Desenvolupament d'Aplicacions Web", 'cred.ms': 'Microsoft, veure la credencial', 'cred.fcc': 'freeCodeCamp, veure la credencial',
       langs: 'Idiomes', nlangs: 'idiomes',
       xpnav: 'Recorregut: tria una feina', now: 'Ara', present: 'Actualitat', today: 'Avui', open: 'Obert a oportunitats', nowRole: 'Backend .NET i Azure', logo: 'Logotip de',
@@ -975,13 +1015,13 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
       title: 'Mostafa Abdel-illah El Ansari', desc: '.NET Backend Developer in Barcelona. REST APIs and microservices with C#, ASP.NET Core and Microsoft Azure.',
       lang: 'Language', menu: 'Menu', brand: 'Mostafa Abdel-illah, go to top', nav: 'Sections', theme: 'Switch between light and dark mode', contact: 'Contact me',
       't.inicio': 'Home', 't.sobre': 'About', 't.xp': 'Experience', 't.sk': 'Skills', 't.pj': 'Projects', 't.ct': 'Contact',
-      avail: 'Open to new opportunities in Barcelona or remote', role: '.NET Backend Developer, C# and Azure',
+      avail: 'Open to new opportunities', role: '.NET Backend Developer, C# and Azure',
       lead: 'I build REST APIs and microservices with C# and ASP.NET Core on Microsoft Azure. Over 3 years building, maintaining and supporting production systems.',
       cv: 'View CV', photo: 'Photo of Mostafa Abdel-illah El Ansari', 'cap.role': 'Backend Developer at Raona', 'cap.since': 'Since December 2023', career: 'Career path',
       big: "I'm a backend developer specialised in the .NET ecosystem and Microsoft Azure. I like code that is maintainable, well tested and built to grow.",
       p1: 'At Raona I build features end to end: APIs and microservices, asynchronous processing with queues, Azure storage and Windows services for file transfer. I also take part in task analysis and estimation and in resolving production incidents.',
       p2: 'I apply SOLID, Clean Architecture and design patterns, and use AI tools such as Claude and OpenAI Codex to work faster and more precisely.',
-      'f.xp': 'Experience', 'f.xpv': '3+ years', 'f.sp': 'Focus', 'f.spv': '.NET and Azure backend', 'f.loc': 'Location',
+      'f.xp': 'Experience', 'f.xpv': '3+ years', 'f.sp': 'Focus', 'f.spv': 'Backend', 'f.loc': 'Location',
       edu: 'Education', certs: 'Certifications', cfgs: 'Higher VET Diploma in Web Application Development', 'cred.ms': 'Microsoft, view credential', 'cred.fcc': 'freeCodeCamp, view credential',
       langs: 'Languages', nlangs: 'languages',
       xpnav: 'Career path: choose a job', now: 'Now', present: 'Present', today: 'Today', open: 'Open to opportunities', nowRole: '.NET and Azure backend', logo: 'Logo of',
@@ -1187,7 +1227,7 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
     const group = s => `<section class="sg"><header>${ui(s.icon)}<h3>${esc(tx(s.name))}</h3></header>
       <ul class="pills">${s.items.map(i => `<li data-u="${where(i)}"><button class="pb" type="button" aria-pressed="false" data-t="${esc(i)}">${ic(i)}${esc(tn(i))}</button></li>`).join('')}</ul></section>`;
     $('skills').innerHTML = `<div class="skcol l">${[0, 2, 3].map(k => group(skills[k])).join('')}</div>
-      <div class="hub"><div class="orb"><span class="k">${esc(L().core)}</span><strong>${esc(L().coreName)}</strong>
+      <div class="hub"><div class="sys"><div class="orbit" aria-hidden="true"></div><div class="orb"><span class="k">${esc(L().core)}</span><strong>${esc(L().coreName)}</strong></div>
         <ul class="core">${core.map((i, k) => `<li style="--a:${k * 360 / core.length - 90}deg"><button class="pb" type="button" aria-pressed="false" data-t="${esc(i)}" title="${esc(i)}" aria-label="${esc(i)}">${ic(i)}</button></li>`).join('')}</ul></div></div>
       <div class="skcol r">${[1, 4, 5].map(k => group(skills[k])).join('')}</div>`;
   }
@@ -1233,10 +1273,12 @@ a.md:is(:hover,:focus-visible) strong,a.md:is(:hover,:focus-visible) span{color:
   }
   // al señalar un idioma de la leyenda, su anillo se queda encendido y el resto se apaga
   const lightRing = k => document.querySelectorAll('#langviz .ring, #langviz li').forEach(e => e.classList.toggle('dim', k != null && e.dataset.i !== String(k)));
-  $('langviz').addEventListener('pointerover', e => { const li = e.target.closest('li[data-i]'); lightRing(li ? li.dataset.i : null); });
-  $('langviz').addEventListener('pointerleave', () => lightRing(null));
-  $('langviz').addEventListener('focusin', e => { const li = e.target.closest('li[data-i]'); if (li) lightRing(li.dataset.i); });
-  $('langviz').addEventListener('focusout', () => lightRing(null));
+  // pulsar un idioma lo deja encendido (otra vez, lo apaga); con ratón, además, se previsualiza al pasar por encima
+  let langSel = null;
+  $('langviz').addEventListener('click', e => { const li = e.target.closest('li[data-i]'); if (!li) return; langSel = langSel === li.dataset.i ? null : li.dataset.i; lightRing(langSel); });
+  $('langviz').addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('li[data-i]')) { e.preventDefault(); e.target.click(); } });
+  $('langviz').addEventListener('pointerover', e => { if (e.pointerType !== 'mouse') return; const li = e.target.closest('li[data-i]'); lightRing(li ? li.dataset.i : langSel); });
+  $('langviz').addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') lightRing(langSel); });
 
   /* ---- habilidades: filtro por empleo o proyectos ---- */
   let filter = '';
